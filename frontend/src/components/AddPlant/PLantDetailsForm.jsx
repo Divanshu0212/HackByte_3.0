@@ -89,7 +89,7 @@ const PlantDetailsForm = ({ formData, onChange }) => {
           <input
             type="text"
             value={formData.nickname}
-            onChange={(e) => onChange('nickname', e.target.value)}
+           
             onBlur={() => handleBlur('nickname')}
             placeholder="E.g., Spike, Leafy, etc."
             className={`w-full px-4 py-2 border rounded-md focus:ring-green-500 focus:border-green-500 ${

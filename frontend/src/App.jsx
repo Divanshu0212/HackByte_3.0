@@ -21,6 +21,10 @@ import AddPlantFlow from './components/AddPlant/AddPlantFlow';
 import ChatPage from './pages/ChatPage';
 import NotificationsPage from './pages/NotificationsPage'; // Import the new NotificationsPage
 import ProfilePage from './components/ProfilePage'; // Import the new ProfilePage component
+
+import ProfileSettingsPage from './pages/ProfileSettingsPage';
+import AddPlantPage from './pages/AddPlantPage';
+
 import { PlantChatProvider } from './components/PlantChatContext';
 import { NotificationProvider } from './components/Notifications/NotificationContext';
 // Divanshus Tests
@@ -177,6 +181,9 @@ function App() {
                             </PageTransition>
                         } />
                     </Route>
+
+
+                      <Route path="/profile/settings" element={<ProfileSettingsPage />} />
 
                     {/* //Divanshus Test Routes */}
                     
