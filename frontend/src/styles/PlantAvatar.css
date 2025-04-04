@@ -1,0 +1,155 @@
+/* src/components/avatars/PlantAvatar.css */
+.plant-avatar {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+/* Size variations */
+.plant-avatar--tiny {
+  width: 40px;
+  height: 40px;
+}
+
+.plant-avatar--small {
+  width: 64px;
+  height: 64px;
+}
+
+.plant-avatar--medium {
+  width: 120px;
+  height: 120px;
+}
+
+.plant-avatar--large {
+  width: 180px;
+  height: 180px;
+}
+
+.plant-avatar--xlarge {
+  width: 250px;
+  height: 250px;
+}
+
+/* Shared plant elements styling */
+.plant-pot {
+  position: absolute;
+  bottom: 0;
+  z-index: 0;
+}
+
+.plant-body {
+  position: relative;
+  z-index: 1;
+}
+
+.plant-face {
+  position: absolute;
+  z-index: 2;
+  transition: all 0.3s ease;
+}
+
+/* Growth stage variations */
+.plant-avatar--stage-seedling .plant-body {
+  transform: scale(0.5);
+}
+
+.plant-avatar--stage-small .plant-body {
+  transform: scale(0.7);
+}
+
+.plant-avatar--stage-medium .plant-body {
+  transform: scale(1);
+}
+
+.plant-avatar--stage-large .plant-body {
+  transform: scale(1.1);
+}
+
+.plant-avatar--stage-flowering .plant-body {
+  transform: scale(1.2);
+}
+
+/* Status indicator dots */
+.plant-status-indicator {
+  position: absolute;
+  bottom: 5px;
+  right: 5px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 2px solid white;
+}
+
+.plant-status-indicator--healthy {
+  background-color: var(--color-success);
+}
+
+.plant-status-indicator--thirsty {
+  background-color: var(--color-warning);
+}
+
+.plant-status-indicator--danger {
+  background-color: var(--color-danger);
+}
+
+/* Speech bubble */
+.plant-speech-bubble {
+  position: absolute;
+  background: white;
+  border-radius: 16px;
+  padding: 10px 15px;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+  top: -60px;
+  max-width: 200px;
+  z-index: 10;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: all 0.3s ease;
+}
+
+.plant-avatar.speaking .plant-speech-bubble {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.plant-speech-bubble:after {
+  content: '';
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  margin-left: -10px;
+  border-width: 10px 10px 0;
+  border-style: solid;
+  border-color: white transparent;
+}
+
+
+  @keyframes talking {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+  }
+  
+  @keyframes waving {
+    0%, 100% { transform: rotate(0deg); }
+    25% { transform: rotate(-5deg); }
+    75% { transform: rotate(5deg); }
+  }
+  
+  @keyframes dancing {
+    0%, 100% { transform: translate(0, 0) rotate(0deg); }
+    25% { transform: translate(-5px, -5px) rotate(-3deg); }
+    50% { transform: translate(0, -8px) rotate(0deg); }
+    75% { transform: translate(5px, -5px) rotate(3deg); }
+  }
+  
+  @keyframes bouncing {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+  }
+  
+  .plant-avatar-talking { animation: talking 1s infinite; }
+  .plant-avatar-waving { animation: waving 2s infinite; }
+  .plant-avatar-dancing { animation: dancing 2s infinite; }
+  .plant-avatar-bouncing { animation: bouncing 1s infinite; }

@@ -209,3 +209,42 @@
 animate-text-slide {
   animation: text-slide 1s ease-in-out;
 }
+
+//For Nav, Home ,header/* Add these to your index.css or App.css file */
+
+@keyframes plant-grow {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+}
+
+@keyframes plant-wiggle {
+  0%, 100% { transform: rotate(-5deg); }
+  50% { transform: rotate(5deg); }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes background-zoom {
+  0% { background-size: 100%; }
+  50% { background-size: 110%; }
+  100% { background-size: 100%; }
+}
+
+.animate-plant-grow {
+  animation: plant-grow 3s ease-in-out infinite;
+}
+
+.animate-plant-wiggle {
+  animation: plant-wiggle 3s ease-in-out infinite;
+}
+
+.animate-float {
+  animation: float 5s ease-in-out infinite;
+}
+
+.animate-background-zoom {
+  animation: background-zoom 20s ease-in-out infinite;
+}
