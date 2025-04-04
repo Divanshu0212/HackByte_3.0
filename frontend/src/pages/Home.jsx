@@ -1,16 +1,12 @@
 import React from 'react';
-import Navbar from '../components/Navbar.jsx';
 import Header from '../components/Header.jsx';
 import Emotion from './Emotion.jsx';
 
 const Home = () => {
   return (
     <div className='flex flex-col items-center justify-start min-h-screen w-full'>
-      {/* Navbar component will handle its own positioning */}
-      <Navbar />
-
-      {/* Main content area with proper margin to avoid navbar overlap */}
-      <div className='w-full md:ml-6 md:mr-64 pt-16 md:pt-6 transition-all duration-300'>
+      {/* Main content area with proper margin to accommodate both sidebars */}
+      <div className='w-full md:ml-64 md:mr-64 pt-16 md:pt-6 transition-all duration-300'>
         <div className='flex flex-col items-center justify-center px-4 md:px-8 pb-20 md:pb-8 max-w-4xl mx-auto'>
           <Header />
           <Emotion />
