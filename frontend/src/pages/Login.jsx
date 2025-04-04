@@ -1,9 +1,10 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useRef } from 'react';
 import { assets } from '../assets/assets.js';
 import { useNavigate } from 'react-router-dom';
 import { AppContent } from '../context/AppContext';
 import axios from 'axios';
 import { toast } from 'react-toastify';
+import Turnstile from 'react-turnstile';
 
 const Login = () => {
     const navigate = useNavigate();
@@ -12,6 +13,7 @@ const Login = () => {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [turnstileToken, setTurnstileToken] = useState('');
     const [passwordStrength, setPasswordStrength] = useState({
         length: false,
         uppercase: false,
@@ -45,6 +47,19 @@ const Login = () => {
         return length && uppercase && lowercase && number && special;
     };
 
+    const handleTurnstileVerify = (token) => {
+        setTurnstileToken(token);
+    };
+
+    const handleTurnstileExpire = () => {
+        setTurnstileToken('');
+        toast.warning('Verification expired, please verify again.');
+    };
+
+    const handleTurnstileError = () => {
+        toast.error('Verification failed, please try again.');
+    };
+
     const onSubmitHandler = async (e) => {
         e.preventDefault();
 
@@ -58,6 +73,11 @@ const Login = () => {
             return;
         }
 
+        if (!turnstileToken) {
+            toast.error('Please complete the security verification.');
+            return;
+        }
+
         try {
             axios.defaults.withCredentials = true;
 
@@ -66,6 +86,7 @@ const Login = () => {
                     name,
                     email,
                     password,
+                    cfTurnstileResponse: turnstileToken
                 });
 
                 if (data.success) {
@@ -78,6 +99,7 @@ const Login = () => {
                 const { data } = await axios.post(`${backendUrl}/api/auth/login`, {
                     email,
                     password,
+                    cfTurnstileResponse: turnstileToken
                 });
 
                 if (data.success) {
@@ -226,6 +248,18 @@ const Login = () => {
                             Forgot password?
                         </p>
                     )}
+
+                    {/* Cloudflare Turnstile Widget */}
+                    <div className="mb-4 flex justify-center">
+                        <Turnstile
+                            sitekey="0x4AAAAAABD1iQKPVltwxRGa" // Replace with your actual site key
+                            onVerify={handleTurnstileVerify}
+                            onExpire={handleTurnstileExpire}
+                            onError={handleTurnstileError}
+                            theme="light"
+                            className="w-full"
+                        />
+                    </div>
 
                     <button className="w-full py-3 rounded-full bg-gradient-to-r from-plant-green-medium to-plant-green-dark text-white font-primary font-medium hover:shadow-md transition-all duration-300 hover:-translate-y-1">
                         {state}
