@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 const verifyTurnstile = async (req, res, next) => {
-  const token = req.body.cfTurnstileToken;
+  const token = req.body.cfTurnstileResponse;
   
   if (!token) {
     return res.status(400).json({ error: 'Turnstile token missing' });

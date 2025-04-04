@@ -80,7 +80,7 @@ const Navbar = () => {
     <div className="hidden md:flex flex-col w-64 h-screen bg-white shadow-lg border-r border-plant-green-lightest fixed left-0 top-0 z-40">
       <div className="p-4 flex items-center border-b border-plant-green-lightest">
         <div className="text-2xl text-plant-green-medium mr-2">🌱</div>
-        <h1 className="font-primary text-xl font-bold text-plant-green-dark">PlantPal</h1>
+        <h1 className="font-primary text-xl font-bold text-plant-green-dark">PlantCare</h1>
       </div>
       <div className="flex flex-col p-4 flex-grow">
         {navItems.map((item) => (
