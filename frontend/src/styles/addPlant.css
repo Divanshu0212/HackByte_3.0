@@ -1,0 +1,55 @@
+/* src/styles/addPlant.css */
+
+/* Add Plant Form Animations */
+.fade-enter {
+  opacity: 0;
+}
+.fade-enter-active {
+  opacity: 1;
+  transition: opacity 300ms ease-in;
+}
+.fade-exit {
+  opacity: 1;
+}
+.fade-exit-active {
+  opacity: 0;
+  transition: opacity 300ms ease-out;
+}
+
+/* Progress indicator styling */
+.step-indicator {
+  transition: all 0.3s ease;
+}
+
+/* Form element transitions */
+.form-control {
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* Selection card hover effects */
+.selection-card {
+  transition: all 0.2s ease;
+}
+.selection-card:hover {
+  transform: translateY(-2px);
+}
+.selection-card.selected {
+  transform: translateY(-4px);
+}
+
+/* Success animation additional styling */
+@keyframes bounce {
+  0%, 20%, 50%, 80%, 100% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(-20px);
+  }
+  60% {
+    transform: translateY(-10px);
+  }
+}
+
+.bounce-animation {
+  animation: bounce 1s ease;
+}
