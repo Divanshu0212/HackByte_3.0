@@ -1,0 +1,211 @@
+/* src/styles/designSystem.css */
+
+:root {
+  /* Color Variables (mirroring Tailwind config) */
+  --plant-green-lightest: #d1ebd8;
+  --plant-green-light: #a8d8b9;
+  --plant-green-medium: #7ac1a1;
+  --plant-green-dark: #4f9a84;
+  --plant-green-darkest: #2c7a6e;
+  
+  --earth-light: #f5f0e1;
+  --earth-medium: #d4c2a5;
+  --earth-dark: #b39578;
+  
+  --accent-pink: #ffb6c1;
+  --accent-pink-dark: #e6a0aa;
+  --accent-yellow: #ffd700;
+  --accent-yellow-dark: #e6c200;
+  --accent-blue: #87cefa;
+  --accent-blue-dark: #5eb1e5;
+  
+  --healthy: #7ac17a;
+  --warning: #ffcc66;
+  --danger: #ff8c8c;
+  --dormant: #b3a599;
+  
+  --background: #fcfaf7;
+  --card-bg: #ffffff;
+  --text-primary: #2c3e50;
+  --text-secondary: #5d6c7b;
+
+  /* Spacing Variables */
+  --spacing-xs: 0.25rem;
+  --spacing-sm: 0.5rem;
+  --spacing-md: 1rem;
+  --spacing-lg: 1.5rem;
+  --spacing-xl: 2rem;
+  --spacing-2xl: 3rem;
+  
+  /* Typography Variables */
+  --font-primary: 'Nunito', sans-serif;
+  --font-secondary: 'Quicksand', sans-serif;
+  
+  /* Animation Variables */
+  --transition-fast: 150ms ease-in-out;
+  --transition-medium: 300ms ease-in-out;
+  --transition-slow: 500ms ease-in-out;
+
+  /* Border Radius */
+  --radius-sm: 0.25rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 1rem;
+  --radius-xl: 1.5rem;
+}
+
+/* Utility Classes for Animations */
+.animate-plant-wiggle {
+  animation: wiggle 2s ease-in-out infinite;
+}
+
+.animate-plant-grow {
+  animation: grow 3s ease-in-out infinite;
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.5s ease-out forwards;
+}
+
+/* Animation Keyframes */
+@keyframes wiggle {
+  0%, 100% { transform: rotate(-3deg); }
+  50% { transform: rotate(3deg); }
+}
+
+@keyframes grow {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+@keyframes fadeIn {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+/* Component Base Styles */
+.plant-card {
+  background-color: var(--card-bg);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: var(--spacing-lg);
+  transition: transform var(--transition-medium), box-shadow var(--transition-medium);
+}
+
+.plant-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+}
+
+.plant-button {
+  font-family: var(--font-primary);
+  font-weight: 600;
+  padding: 0.5rem 1.25rem;
+  border-radius: var(--radius-md);
+  transition: all var(--transition-fast);
+}
+
+.plant-button-primary {
+  background-color: var(--plant-green-medium);
+  color: white;
+}
+
+.plant-button-primary:hover {
+  background-color: var(--plant-green-dark);
+}
+
+.plant-button-secondary {
+  background-color: var(--earth-light);
+  color: var(--text-primary);
+}
+
+.plant-button-secondary:hover {
+  background-color: var(--earth-medium);
+}
+
+.plant-avatar {
+  border-radius: 50%;
+  overflow: hidden;
+  background-color: var(--plant-green-lightest);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.plant-input {
+  border: 2px solid var(--earth-light);
+  border-radius: var(--radius-md);
+  padding: 0.5rem 1rem;
+  font-family: var(--font-secondary);
+  transition: border-color var(--transition-fast);
+}
+
+.plant-input:focus {
+  outline: none;
+  border-color: var(--plant-green-medium);
+}
+
+
+
+//Extra:
+
+/* src/index.css or a separate CSS file for Home.jsx */ 
+@keyframes background-zoom {
+  0% {
+    background-size: 100%;
+  }
+  50% {
+    background-size: 110%;
+  }
+  100% {
+    background-size: 100%;
+  }
+}
+
+.animate-background-zoom {
+  animation: background-zoom 10s infinite ease-in-out;
+}
+
+/* src/index.css or a separate CSS file  for Header.jsx*/
+@keyframes header-image-zoom {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.animate-header-image {
+  animation: header-image-zoom 8s infinite ease-in-out;
+}
+
+@keyframes text-fade {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes text-slide {
+  0% {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.animate-text-fade {
+  animation: text-fade 1s ease-in-out;
+}
+
+animate-text-slide {
+  animation: text-slide 1s ease-in-out;
+}
