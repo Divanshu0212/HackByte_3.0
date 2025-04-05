@@ -1,0 +1,9 @@
+name = "your-api-name"
+type = "webpack"
+account_id = "your-account-id"
+workers_dev = true
+route = "your-domain.com/api/*"
+compatibility_date = "2023-01-01"
+
+[build]
+command = "npm install && npm run build"

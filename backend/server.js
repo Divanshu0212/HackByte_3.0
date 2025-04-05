@@ -59,6 +59,8 @@ const server = app.listen(port, () => {
   console.log(`Server running on port ${port}`);
 });
 
+export default app
+
 // Handle unhandled promise rejections
 process.on('unhandledRejection', (err) => {
   console.error(`Unhandled Rejection: ${err.message}`);
