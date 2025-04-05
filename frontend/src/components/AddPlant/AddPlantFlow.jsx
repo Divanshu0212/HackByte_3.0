@@ -118,12 +118,9 @@ const AddPlantFlow = () => {
     setSubmitError(null);
 
     try {
-      console.log('Form data before submit:', formData); // Debug log
-      console.log('Auth token:', localStorage.getItem('token')); // Debug log
-
       const token = localStorage.getItem('token');
 
-      axios.get('http://localhost:5173/api/plants/upload', {
+      axios.get('/api/plants/upload', {
         withCredentials: true,
         headers: {
           'Authorization': `Bearer ${token}`

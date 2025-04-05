@@ -38,6 +38,8 @@ const addPlant = async (req, res) => {
     if (req.file) {
       try {
         const uploadResult = await uploadToCloudinary(req.file, 'plants');
+        console.log(uploadResult);
+        
         avatarData.url = uploadResult.url;
         avatarData.public_id = uploadResult.public_id;
       } catch (uploadError) {
