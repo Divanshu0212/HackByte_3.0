@@ -7,7 +7,7 @@ import SuccessConfirmation from './SuccessConfirmation';
 import ProgressIndicator from './ProgressIndicator';
 import { usePlants } from '../../context/PlantContext';
 import { AppContent } from '../../context/AppContext';
-import './AddPLantFlow.css';
+import './AddPlantFlow1.css';
 import axios from 'axios'
 
 const AddPlantFlow = () => {
