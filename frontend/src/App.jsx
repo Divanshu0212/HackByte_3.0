@@ -25,6 +25,15 @@ import ProfileSettingsPage from './pages/ProfileSettingsPage';
 import RewardsPage from './pages/RewardsPage';
 import LandingPage from './pages/LandingPage.jsx'; // Import the new landing page
 
+// Import new Community components
+import CommunityHub from './pages/CommunityHub.jsx';
+import CommunityPage from './pages/CommunityPage.jsx'; // No direct route to the template anymore
+import AppleCommunity from './pages/CommunityPages/AppleCommunity.jsx';
+import CornCommunity from './pages/CommunityPages/CornCommunity.jsx';
+import RiceCommunity from './pages/CommunityPages/RiceCommunity.jsx';
+import WheatCommunity from './pages/CommunityPages/WheatCommunity.jsx';
+import TomatoCommunity from './pages/CommunityPages/TomatoCommunity.jsx';
+
 import { PlantChatProvider } from './components/PlantChatContext';
 import { NotificationProvider } from './components/Notifications/NotificationContext';
 import { PlantProvider } from './context/PlantContext';
@@ -42,7 +51,7 @@ const PlantsPage = () => <PlantsDashboard />;
 
 // Animated page transitions
 const PageTransition = ({ children }) => {
-  const location = useLocation();
+    const location = useLocation();
 
   return (
     <AnimatePresence mode="wait">
@@ -63,151 +72,186 @@ const PageTransition = ({ children }) => {
 };
 
 function App() {
-  return (
-    <RewardsProvider>
-      <PlantProvider>
-        <NotificationProvider>
-          <ToastContainer
-            position="top-right"
-            autoClose={5000}
-            hideProgressBar={false}
-            newestOnTop
-            closeOnClick
-            rtl={false}
-            pauseOnFocusLoss
-            draggable
-            pauseOnHover
-            theme="light"
-          />
-          <RewardToast />
-          <Routes>
-            {/* Public landing page */}
-            <Route path="/" element={
-              <PageTransition>
-                <LandingPage />
-              </PageTransition>
-            } />
+    return (
+        <RewardsProvider>
+            <PlantProvider>
+                <NotificationProvider>
+                    <ToastContainer
+                        position="top-right"
+                        autoClose={5000}
+                        hideProgressBar={false}
+                        newestOnTop
+                        closeOnClick
+                        rtl={false}
+                        pauseOnFocusLoss
+                        draggable
+                        pauseOnHover
+                        theme="light"
+                    />
+                    <RewardToast />
+                    <Routes>
+                        {/* Public landing page */}
+                        <Route path="/" element={
+                            <PageTransition>
+                                <LandingPage />
+                            </PageTransition>
+                        } />{/* Auth routes - no layout */}
+                        <Route path="/login" element={
+                            <PageTransition>
+                                <Login />
+                            </PageTransition>
+                        } />
+                        <Route path="/emotion" element={
+                            <PageTransition>
+                                <Emotion />
+                            </PageTransition>
+                        } />
+                        <Route path="/email-verify" element={
+                            <PageTransition>
+                                <EmailVerify />
+                            </PageTransition>
+                        } />
+                        <Route path="/reset-password" element={
+                            <PageTransition>
+                                <ResetPassword />
+                            </PageTransition>
+                        } />
 
-            {/* Auth routes - no layout */}
-            <Route path="/login" element={
-              <PageTransition>
-                <Login />
-              </PageTransition>
-            } />
-            <Route path="/emotion" element={
-              <PageTransition>
-                <Emotion />
-              </PageTransition>
-            } />
-            <Route path="/email-verify" element={
-              <PageTransition>
-                <EmailVerify />
-              </PageTransition>
-            } />
-            <Route path="/reset-password" element={
-              <PageTransition>
-                <ResetPassword />
-              </PageTransition>
-            } />
+                        {/* Main app routes with layout - Home is now the dashboard */}
+                        <Route element={<Layout />}>
+                            <Route path="/dashboard" element={
+                                <PageTransition>
+                                    <Home />
+                                </PageTransition>
+                            } />
+                            <Route path="/plants" element={
+                                <PageTransition>
+                                    <PlantsPage />
+                                </PageTransition>
+                            } />
+                            {/* ... other routes within the Layout ... */}
+                            <Route path="/plants/:plantId" element={
+                                <PageTransition>
+                                    <PlantDetail />
+                                </PageTransition>
+                            } />
+                            <Route path="/plants/add" element={
+                                <PageTransition>
+                                    <AddPlantFlow />
+                                </PageTransition>
+                            } />
+                            <Route path="/plant-avatars" element={
+                                <PageTransition>
+                                    <PlantAvatarTest />
+                                </PageTransition>
+                            } />
+                            <Route path="/notifications" element={
+                                <PageTransition>
+                                    <NotificationsPage />
+                                </PageTransition>
+                            } />
+                            <Route path="/schedule" element={
+                                <PageTransition>
+                                    <SchedulePage />
+                                </PageTransition>
+                            } />
+                            <Route path="/profile" element={
+                                <PageTransition>
+                                    <ProfilePage />
+                                </PageTransition>
+                            } />
+                            <Route path="/avatars" element={
+                                <PageTransition>
+                                    <PlantAvatarShowcase />
+                                </PageTransition>
+                            } />
+                            <Route path="/gallery" element={
+                                <PageTransition>
+                                    <EnhancedPlantGallery />
+                                </PageTransition>
+                            } />
+                            <Route path="/rewards" element={
+                                <PageTransition>
+                                    <RewardsPage />
+                                </PageTransition>
+                            } />
+                            <Route path="/demo" element={
+                                <PageTransition>
+                                    <div className="max-w-md mx-auto">
+                                        <h1 className="text-2xl font-bold text-green-800 mb-6 text-center">Talk to Your Plant</h1>
+                                        <PlantChatProvider>
+                                            <PlantConversation />
+                                        </PlantChatProvider>
+                                    </div>
+                                </PageTransition>
+                            } />
+                            <Route path="/chat" element={
+                                <PageTransition>
+                                    <PlantChatProvider>
+                                        <ChatPage />
+                                    </PlantChatProvider>
+                                </PageTransition>
+                            } />
+                            <Route path="/plants/:plantId/chat" element={
+                                <PageTransition>
+                                    <PlantChatProvider>
+                                        <ChatPage />
+                                    </PlantChatProvider>
+                                </PageTransition>
+                            } />
+                            <Route path="/profile/settings" element={
+                                <PageTransition>
+                                    <ProfileSettingsPage />
+                                </PageTransition>
+                            } />
 
-            {/* Main app routes with layout - Home is now the dashboard */}
-            <Route element={<Layout />}>
-              <Route path="/dashboard" element={
-                <PageTransition>
-                  <Home />
-                </PageTransition>
-              } />
-              <Route path="/plants" element={
-                <PageTransition>
-                  <PlantsPage />
-                </PageTransition>
-              } />
-              {/* ... other routes within the Layout ... */}
-              <Route path="/plants/:plantId" element={
-                <PageTransition>
-                  <PlantDetail />
-                </PageTransition>
-              } />
-              <Route path="/plants/add" element={
-                <PageTransition>
-                  <AddPlantFlow />
-                </PageTransition>
-              } />
-              <Route path="/plant-avatars" element={
-                <PageTransition>
-                  <PlantAvatarTest />
-                </PageTransition>
-              } />
-              <Route path="/notifications" element={
-                <PageTransition>
-                  <NotificationsPage />
-                </PageTransition>
-              } />
-              <Route path="/schedule" element={
-                <PageTransition>
-                  <SchedulePage />
-                </PageTransition>
-              } />
-              <Route path="/profile" element={
-                <PageTransition>
-                  <ProfilePage />
-                </PageTransition>
-              } />
-              <Route path="/avatars" element={
-                <PageTransition>
-                  <PlantAvatarShowcase />
-                </PageTransition>
-              } />
-              <Route path="/gallery" element={
-                <PageTransition>
-                  <EnhancedPlantGallery />
-                </PageTransition>
-              } />
-              <Route path="/rewards" element={
-                <PageTransition>
-                  <RewardsPage />
-                </PageTransition>
-              } />
-              <Route path="/demo" element={
-                <PageTransition>
-                  <div className="max-w-md mx-auto">
-                    <h1 className="text-2xl font-bold text-green-800 mb-6 text-center">Talk to Your Plant</h1>
-                    <PlantChatProvider>
-                      <PlantConversation />
-                    </PlantChatProvider>
-                  </div>
-                </PageTransition>
-              } />
-              <Route path="/chat" element={
-                <PageTransition>
-                  <PlantChatProvider>
-                    <ChatPage />
-                  </PlantChatProvider>
-                </PageTransition>
-              } />
-              <Route path="/plants/:plantId/chat" element={
-                <PageTransition>
-                  <PlantChatProvider>
-                    <ChatPage />
-                  </PlantChatProvider>
-                </PageTransition>
-              } />
-              <Route path="/profile/settings" element={
-                <PageTransition>
-                  <ProfileSettingsPage />
-                </PageTransition>
-              } />
-              <Route path="/health" element={
-                <PageTransition>
-                  <PlantHealthCheck />
-                </PageTransition>
-              } />
-            </Route>
-          </Routes>
-        </NotificationProvider>
-      </PlantProvider>
-    </RewardsProvider>
-  );
+                            {/* New Community routes */}
+                            <Route path="/community" element={
+                                <PageTransition>
+                                    <CommunityHub />
+                                </PageTransition>
+                            } />
+                            {/* Route to the individual hardcoded community pages */}
+                            <Route path="/community/apple" element={
+                                <PageTransition>
+                                    <AppleCommunity />
+                                </PageTransition>
+                            } />
+                            <Route path="/community/corn" element={
+                                <PageTransition>
+                                    <CornCommunity />
+                                </PageTransition>
+                            } />
+                            <Route path="/community/rice" element={
+                                <PageTransition>
+                                    <RiceCommunity />
+                                </PageTransition>
+                            } />
+                            <Route path="/community/wheat" element={
+                                <PageTransition>
+                                    <WheatCommunity />
+                                </PageTransition>
+                            } />
+                            <Route path="/community/tomato" element={
+                                <PageTransition>
+                                    <TomatoCommunity />
+                                </PageTransition>
+                            } />
+                            {/* You can still have a dynamic route if you want a fallback or more flexibility later */}
+                            {/* <Route path="/community/:plantType" element={
+                                <PageTransition>
+                                    <CommunityPage />
+                                </PageTransition>
+                            } /> */}
+                        </Route>
+
+                        {/* Test routes */}
+                        <Route path="/health" element={<PlantHealthCheck />} />
+                    </Routes>
+                </NotificationProvider>
+            </PlantProvider>
+        </RewardsProvider>
+    );
 }
 
 export default App;
