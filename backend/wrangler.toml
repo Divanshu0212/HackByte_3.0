@@ -1,9 +1,28 @@
 name = "your-api-name"
 type = "webpack"
-account_id = "your-account-id"
+account_id = "ee884903afec0cca80d13463e5daa02f"
 workers_dev = true
 route = "your-domain.com/api/*"
 compatibility_date = "2023-01-01"
+main = "src/index.ts"
 
 [build]
 command = "npm install && npm run build"
+
+MONGODB_URI='mongodb+srv://hackbyte:divanshu7078@cluster0.dww4cwg.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0'
+
+JWT_SECRET ='auth#Sec'  
+NODE_ENV ='development'  
+
+SMTP_USER ="890ebf001@smtp-brevo.com"  
+SMTP_PASS ="mERqpfYgjJdt9PF1"  
+
+SENDER_EMAIL="shiki2hustle@gmail.com"  
+
+CLOUDFLARE_TURNSTILE_SECRET=0x4AAAAAABD1iYf69eOYHSR3JYaHexTltNM
+CLOUDFLARE_TURNSTILE_SITE_KEY=0x4AAAAAABD1iQKPVltwxRGa
+
+CLOUDINARY_CLOUD_NAME=dloajdyaj
+CLOUDINARY_API_KEY=781546537482862
+CLOUDINARY_API_SECRET=KbBiqYa0etEKUdGhyZmfGcFi4pE
+CLOUDINARY_URL=cloudinary://781546537482862:KbBiqYa0etEKUdGhyZmfGcFi4pE@dloajdyaj
