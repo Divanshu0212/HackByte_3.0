@@ -203,8 +203,11 @@ export const isAuthenticated = [
 ];
 
 // Send Password Reset OTP
+// Updated sendResetOtp function
 export const sendResetOtp = asyncHandler(async (req, res) => {
-    const { email } = req.query; // Get email from query parameter
+    // Changed from req.query to req.body since form data usually comes in body
+    const { email } = req.body; 
+    
     if (!email) {
         return sendError(res, 'Email is required', 400);
     }
@@ -226,9 +229,13 @@ export const sendResetOtp = asyncHandler(async (req, res) => {
         html: PASSWORD_RESET_TEMPLATE.replace('{{otp}}', otp).replace('{{email}}', user.email),
     };
 
-    await transporter.sendMail(mailOption);
-
-    sendSuccess(res, {}, 'OTP sent to your email');
+    try {
+        await transporter.sendMail(mailOption);
+        sendSuccess(res, {}, 'OTP sent to your email');
+    } catch (error) {
+        console.error('Error sending reset OTP email:', error);
+        sendError(res, 'Error sending email', 500);
+    }
 });
 
 // Reset user Password
