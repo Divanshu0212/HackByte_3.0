@@ -28,7 +28,6 @@ import { NotificationProvider } from './components/Notifications/NotificationCon
 import { PlantProvider } from './context/PlantContext';
 
 // Test components
-import PlantChatbot from './pages/chatbot.jsx';
 import PlantHealthCheck from './pages/plantHealth.jsx';
 import Emotion from './pages/Emotion.jsx';
 
@@ -176,9 +175,8 @@ function App() {
                             </PageTransition>
                         } />
                     </Route>
-
+                        
                     {/* Test routes */}
-                    <Route path="/chat-test" element={<PlantChatbot />} />
                     <Route path="/health" element={<PlantHealthCheck />} />
                 </Routes>
             </NotificationProvider>

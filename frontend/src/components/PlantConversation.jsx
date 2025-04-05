@@ -276,24 +276,7 @@ const PlantConversation = ({ initialPlantType }) => {
                         </div>
                     )}
 
-                    {!namingComplete && conversationStep < conversationScript.length && conversationScript[conversationStep].requiresInput && (
-                        <form onSubmit={handleInputSubmit} className="mt-4 flex gap-2">
-                            <input
-                                type="text"
-                                value={userResponse}
-                                onChange={(e) => setUserResponse(e.target.value)}
-                                placeholder="Type your plant's name..."
-                                className="flex-1 p-2 border border-green-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
-                                autoFocus
-                            />
-                            <button
-                                type="submit"
-                                className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors"
-                            >
-                                Send
-                            </button>
-                        </form>
-                    )}
+                    
 
                     {currentPlantId && plant && namingComplete && (
                         <div className="plant-status-indicators mt-4 p-4 bg-green-50 rounded-lg">
