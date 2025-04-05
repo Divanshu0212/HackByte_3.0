@@ -8,7 +8,8 @@ import {
   User as ProfileIcon,
   Menu as MenuIcon,
   X as CloseIcon,
-  Plus as PlusIcon
+  Plus as PlusIcon,
+  Gift as GiftIcon 
 } from 'lucide-react';
 import { AppContent } from '../context/AppContext';
 import { toast } from 'react-toastify';
@@ -69,6 +70,8 @@ const Navbar = () => {
     { name: 'Reminders', path: '/reminders', icon: <NotificationIcon className="w-6 h-6" /> },
     { name: 'Schedule', path: '/schedule', icon: <ScheduleIcon className="w-6 h-6" /> },
     { name: 'Profile', path: '/profile', icon: <ProfileIcon className="w-6 h-6" /> },
+    // Add this to your navItems array
+{ name: 'Rewards', path: '/rewards', icon: <GiftIcon className="w-6 h-6" /> },
   ];
 
   const toggleSidebar = () => {

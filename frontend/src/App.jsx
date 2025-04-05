@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Routes, Route, useLocation } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 import { ToastContainer } from 'react-toastify';
@@ -22,10 +22,13 @@ import ChatPage from './pages/ChatPage';
 import NotificationsPage from './pages/NotificationsPage';
 import ProfilePage from './components/ProfilePage';
 import ProfileSettingsPage from './pages/ProfileSettingsPage';
+import RewardsPage from './pages/RewardsPage';
 
 import { PlantChatProvider } from './components/PlantChatContext';
 import { NotificationProvider } from './components/Notifications/NotificationContext';
 import { PlantProvider } from './context/PlantContext';
+import { RewardsProvider } from './context/RewardsContext';
+import RewardToast from './components/Rewards/RewardToast';
 
 // Test components
 import PlantHealthCheck from './pages/plantHealth.jsx';
@@ -56,131 +59,139 @@ const PageTransition = ({ children }) => {
 
 function App() {
     return (
-        <PlantProvider>
-            <NotificationProvider>
-                <ToastContainer
-                    position="top-right"
-                    autoClose={5000}
-                    hideProgressBar={false}
-                    newestOnTop
-                    closeOnClick
-                    rtl={false}
-                    pauseOnFocusLoss
-                    draggable
-                    pauseOnHover
-                    theme="light"
-                />
-                <Routes>
-                    {/* Auth routes - no layout */}
-                    <Route path="/login" element={
-                        <PageTransition>
-                            <Login />
-                        </PageTransition>
-                    } />
-                    <Route path="/emotion" element={
-                        <PageTransition>
-                            <Emotion />
-                        </PageTransition>
-                    } />
-                    <Route path="/email-verify" element={
-                        <PageTransition>
-                            <EmailVerify />
-                        </PageTransition>
-                    } />
-                    <Route path="/reset-password" element={
-                        <PageTransition>
-                            <ResetPassword />
-                        </PageTransition>
-                    } />
+        <RewardsProvider>
+            <PlantProvider>
+                <NotificationProvider>
+                    <ToastContainer
+                        position="top-right"
+                        autoClose={5000}
+                        hideProgressBar={false}
+                        newestOnTop
+                        closeOnClick
+                        rtl={false}
+                        pauseOnFocusLoss
+                        draggable
+                        pauseOnHover
+                        theme="light"
+                    />
+                    <RewardToast />
+                    <Routes>
+                        {/* Auth routes - no layout */}
+                        <Route path="/login" element={
+                            <PageTransition>
+                                <Login />
+                            </PageTransition>
+                        } />
+                        <Route path="/emotion" element={
+                            <PageTransition>
+                                <Emotion />
+                            </PageTransition>
+                        } />
+                        <Route path="/email-verify" element={
+                            <PageTransition>
+                                <EmailVerify />
+                            </PageTransition>
+                        } />
+                        <Route path="/reset-password" element={
+                            <PageTransition>
+                                <ResetPassword />
+                            </PageTransition>
+                        } />
 
-                    {/* Main app routes with layout */}
-                    <Route element={<Layout />}>
-                        <Route path="/" element={
-                            <PageTransition>
-                                <Home />
-                            </PageTransition>
-                        } />
-                        <Route path="/plants" element={
-                            <PageTransition>
-                                <PlantsPage />
-                            </PageTransition>
-                        } />
-                        <Route path="/plants/:plantId" element={
-                            <PageTransition>
-                                <PlantDetail />
-                            </PageTransition>
-                        } />
-                        <Route path="/plants/add" element={
-                            <PageTransition>
-                                <AddPlantFlow />
-                            </PageTransition>
-                        } />
-                        <Route path="/plant-avatars" element={
-                            <PageTransition>
-                                <PlantAvatarTest />
-                            </PageTransition>
-                        } />
-                        <Route path="/notifications" element={
-                            <PageTransition>
-                                <NotificationsPage />
-                            </PageTransition>
-                        } />
-                        <Route path="/schedule" element={
-                            <PageTransition>
-                                <SchedulePage />
-                            </PageTransition>
-                        } />
-                        <Route path="/profile" element={
-                            <PageTransition>
-                                <ProfilePage />
-                            </PageTransition>
-                        } />
-                        <Route path="/avatars" element={
-                            <PageTransition>
-                                <PlantAvatarShowcase />
-                            </PageTransition>
-                        } />
-                        <Route path="/gallery" element={
-                            <PageTransition>
-                                <EnhancedPlantGallery />
-                            </PageTransition>
-                        } />
-                        <Route path="/demo" element={
-                            <PageTransition>
-                                <div className="max-w-md mx-auto">
-                                    <h1 className="text-2xl font-bold text-green-800 mb-6 text-center">Talk to Your Plant</h1>
+                        {/* Main app routes with layout */}
+                        <Route element={<Layout />}>
+                            <Route path="/" element={
+                                <PageTransition>
+                                    <Home />
+                                </PageTransition>
+                            } />
+                            <Route path="/plants" element={
+                                <PageTransition>
+                                    <PlantsPage />
+                                </PageTransition>
+                            } />
+                            <Route path="/plants/:plantId" element={
+                                <PageTransition>
+                                    <PlantDetail />
+                                </PageTransition>
+                            } />
+                            <Route path="/plants/add" element={
+                                <PageTransition>
+                                    <AddPlantFlow />
+                                </PageTransition>
+                            } />
+                            <Route path="/plant-avatars" element={
+                                <PageTransition>
+                                    <PlantAvatarTest />
+                                </PageTransition>
+                            } />
+                            <Route path="/notifications" element={
+                                <PageTransition>
+                                    <NotificationsPage />
+                                </PageTransition>
+                            } />
+                            <Route path="/schedule" element={
+                                <PageTransition>
+                                    <SchedulePage />
+                                </PageTransition>
+                            } />
+                            <Route path="/profile" element={
+                                <PageTransition>
+                                    <ProfilePage />
+                                </PageTransition>
+                            } />
+                            <Route path="/avatars" element={
+                                <PageTransition>
+                                    <PlantAvatarShowcase />
+                                </PageTransition>
+                            } />
+                            <Route path="/gallery" element={
+                                <PageTransition>
+                                    <EnhancedPlantGallery />
+                                </PageTransition>
+                            } />
+                            <Route path="/rewards" element={
+                                <PageTransition>
+                                    <RewardsPage />
+                                </PageTransition>
+                            } />
+                            <Route path="/demo" element={
+                                <PageTransition>
+                                    <div className="max-w-md mx-auto">
+                                        <h1 className="text-2xl font-bold text-green-800 mb-6 text-center">Talk to Your Plant</h1>
+                                        <PlantChatProvider>
+                                            <PlantConversation />
+                                        </PlantChatProvider>
+                                    </div>
+                                </PageTransition>
+                            } />
+                            <Route path="/chat" element={
+                                <PageTransition>
                                     <PlantChatProvider>
-                                        <PlantConversation />
+                                        <ChatPage />
                                     </PlantChatProvider>
-                                </div>
-                            </PageTransition>
-                        } />
-                        <Route path="/chat" element={
-                            <PageTransition>
-                                <PlantChatProvider>
-                                    <ChatPage />
-                                </PlantChatProvider>
-                            </PageTransition>
-                        } />
-                        <Route path="/plants/:plantId/chat" element={
-                            <PageTransition>
-                                <PlantChatProvider>
-                                    <ChatPage />
-                                </PlantChatProvider>
-                            </PageTransition>
-                        } />
-                        <Route path="/profile/settings" element={
-                            <PageTransition>
-                                <ProfileSettingsPage />
-                            </PageTransition>
-                        } />
-                    </Route>
-                        
-                    {/* Test routes */}
-                    <Route path="/health" element={<PlantHealthCheck />} />
-                </Routes>
-            </NotificationProvider>
-        </PlantProvider>
+                                </PageTransition>
+                            } />
+                            <Route path="/plants/:plantId/chat" element={
+                                <PageTransition>
+                                    <PlantChatProvider>
+                                        <ChatPage />
+                                    </PlantChatProvider>
+                                </PageTransition>
+                            } />
+                            <Route path="/profile/settings" element={
+                                <PageTransition>
+                                    <ProfileSettingsPage />
+                                </PageTransition>
+                            } />
+                        </Route>
+                            
+                        {/* Test routes */}
+                        <Route path="/health" element={<PlantHealthCheck />} />
+                    </Routes>
+                </NotificationProvider>
+            </PlantProvider>
+        </RewardsProvider>
     );
 }
 
