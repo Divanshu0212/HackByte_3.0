@@ -5,8 +5,7 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 import Layout from './components/Layout.jsx';
-import Home from './pages/Home.jsx'; // This will now be the dashboard
-import LandingPage from './pages/LandingPage.jsx'; // Import the new landing page
+import Home from './pages/Home.jsx'; // This remains your dashboard
 import Login from './pages/Login.jsx';
 import EmailVerify from './pages/EmailVerify.jsx';
 import ResetPassword from './pages/ResetPassword.jsx';
@@ -24,6 +23,7 @@ import NotificationsPage from './pages/NotificationsPage';
 import ProfilePage from './components/ProfilePage';
 import ProfileSettingsPage from './pages/ProfileSettingsPage';
 import RewardsPage from './pages/RewardsPage';
+import LandingPage from './pages/LandingPage.jsx'; // Import the new landing page
 
 import { PlantChatProvider } from './components/PlantChatContext';
 import { NotificationProvider } from './components/Notifications/NotificationContext';
@@ -118,6 +118,7 @@ function App() {
                   <PlantsPage />
                 </PageTransition>
               } />
+              {/* ... other routes within the Layout ... */}
               <Route path="/plants/:plantId" element={
                 <PageTransition>
                   <PlantDetail />
