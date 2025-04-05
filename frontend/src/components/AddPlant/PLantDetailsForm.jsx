@@ -1,14 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { usePlantTypes } from '../../context/PlantContext';
+import { FaTint, FaSun, FaLeaf } from 'react-icons/fa';
 
-const PlantDetailsForm = ({ formData, onChange, plantTypeId }) => {
+const PlantDetailsForm = ({ formData, onChange, plantType, isQuickAdd, onToggleQuickAdd }) => {
   const [errors, setErrors] = useState({});
   const [touched, setTouched] = useState({});
   const { getPlantTypeById, getPlantCareInfo } = usePlantTypes();
+console.log(plantType);
 
   // Get plant type data
-  const plantType = getPlantTypeById(plantTypeId);
-  const careInfo = getPlantCareInfo(plantTypeId);
+  const careInfo = getPlantCareInfo(plantType);
 
   const conditions = [
     { id: 'healthy', label: 'Healthy', icon: '😊' },
@@ -28,28 +29,65 @@ const PlantDetailsForm = ({ formData, onChange, plantTypeId }) => {
     { id: 'medium', label: 'Medium (6-12")' },
     { id: 'large', label: 'Large (> 12")' }
   ];
+  const wateringOptions = [
+    { id: 'daily', label: 'Daily' },
+    { id: 'weekly', label: 'Weekly' },
+    { id: 'biweekly', label: 'Bi-weekly' },
+    { id: 'monthly', label: 'Monthly' },
+    { id: 'asNeeded', label: 'As needed' }
+  ];
+
+  const sunlightOptions = [
+    { id: 'full', label: 'Full sun' },
+    { id: 'partial', label: 'Partial sun' },
+    { id: 'shade', label: 'Shade' },
+    { id: 'indirect', label: 'Indirect light' }
+  ];
+
+  const fertilizationOptions = [
+    { id: 'weekly', label: 'Weekly' },
+    { id: 'monthly', label: 'Monthly' },
+    { id: 'quarterly', label: 'Quarterly' },
+    { id: 'seasonal', label: 'Seasonal' }
+  ];
+
+  const handleFieldChange = (field, value) => {
+    onChange({ [field]: value });
+  };
+
+  const getCareRecommendation = () => {
+    if (!careInfo) return null;
+    return (
+      <div className="mt-4 p-3 bg-blue-50 border border-blue-200 rounded-md text-sm">
+        <div className="font-medium mb-1">Care Recommendations for {plantType?.name}</div>
+        <p><span className="font-semibold">Water:</span> {careInfo.waterFrequency}</p>
+        <p><span className="font-semibold">Light:</span> {careInfo.lightNeeds}</p>
+        <p><span className="font-semibold">Care Level:</span> {careInfo.fertilizerNeeds}</p>
+      </div>
+    );
+  };
 
   // Validate form fields
   useEffect(() => {
     const newErrors = {};
-    
+
     if (touched.nickname && (!formData.nickname || formData.nickname.trim() === '')) {
       newErrors.nickname = 'Plant nickname is required';
     }
-    
+
     if (touched.nickname && formData.nickname && formData.nickname.length > 30) {
       newErrors.nickname = 'Nickname must be 30 characters or less';
     }
-    
+
     if (touched.acquisitionDate) {
       const selectedDate = new Date(formData.acquisitionDate);
       const today = new Date();
-      
+
       if (selectedDate > today) {
         newErrors.acquisitionDate = 'Date cannot be in the future';
       }
     }
-    
+
     setErrors(newErrors);
   }, [formData, touched]);
 
@@ -78,19 +116,6 @@ const PlantDetailsForm = ({ formData, onChange, plantTypeId }) => {
     return null;
   };
 
-  const getCareRecommendation = () => {
-    if (!careInfo) return null;
-    
-    return (
-      <div className="mt-4 p-3 bg-blue-50 border border-blue-200 rounded-md text-sm">
-        <div className="font-medium mb-1">Care Recommendations for {plantType?.name}</div>
-        <p><span className="font-semibold">Water:</span> {careInfo.waterFrequency}</p>
-        <p><span className="font-semibold">Light:</span> {careInfo.lightNeeds}</p>
-        <p><span className="font-semibold">Care Level:</span> {careInfo.careLevel}</p>
-      </div>
-    );
-  };
-
   return (
     <div>
       <h2 className="text-xl font-semibold text-green-800 mb-4">Plant Details</h2>
@@ -113,9 +138,8 @@ const PlantDetailsForm = ({ formData, onChange, plantTypeId }) => {
             onChange={(e) => onChange('nickname', e.target.value)}
             onBlur={() => handleBlur('nickname')}
             placeholder="E.g., Spike, Leafy, etc."
-            className={`w-full px-4 py-2 border rounded-md focus:ring-green-500 focus:border-green-500 ${
-              errors.nickname ? 'border-red-500' : 'border-gray-300'
-            }`}
+            className={`w-full px-4 py-2 border rounded-md focus:ring-green-500 focus:border-green-500 ${errors.nickname ? 'border-red-500' : 'border-gray-300'
+              }`}
             required
             aria-describedby={errors.nickname ? "nickname-error" : ""}
           />
@@ -136,21 +160,20 @@ const PlantDetailsForm = ({ formData, onChange, plantTypeId }) => {
           </label>
           <div className="grid grid-cols-3 gap-3">
             {conditions.map((condition) => (
-              <div
+              <button
                 key={condition.id}
-                onClick={() => onChange('condition', condition.id)}
-                className={`cursor-pointer border rounded-md p-3 text-center transition-all ${
-                  formData.condition === condition.id
+                onClick={() => handleFieldChange('condition', condition.id)}
+                className={`cursor-pointer border rounded-md p-3 text-center transition-all ${formData.condition === condition.id
                     ? 'border-green-600 bg-green-50'
                     : 'border-gray-200 hover:border-green-300'
-                }`}
+                  }`}
                 role="button"
                 tabIndex={0}
                 aria-pressed={formData.condition === condition.id}
               >
                 <div className="text-2xl mb-1">{condition.icon}</div>
                 <div className="text-sm">{condition.label}</div>
-              </div>
+              </button>
             ))}
           </div>
           {getQuickTip()}
@@ -165,12 +188,11 @@ const PlantDetailsForm = ({ formData, onChange, plantTypeId }) => {
             {locations.map((location) => (
               <div
                 key={location.id}
-                onClick={() => onChange('location', location.id)}
-                className={`cursor-pointer border rounded-md p-3 text-center transition-all ${
-                  formData.location === location.id
+                onClick={() => handleFieldChange('location', location.id)}
+                className={`cursor-pointer border rounded-md p-3 text-center transition-all ${formData.location === location.id
                     ? 'border-green-600 bg-green-50'
                     : 'border-gray-200 hover:border-green-300'
-                }`}
+                  }`}
                 role="button"
                 tabIndex={0}
                 aria-pressed={formData.location === location.id}
@@ -190,12 +212,11 @@ const PlantDetailsForm = ({ formData, onChange, plantTypeId }) => {
             {potSizes.map((size) => (
               <div
                 key={size.id}
-                onClick={() => onChange('potSize', size.id)}
-                className={`cursor-pointer border rounded-md p-3 text-center transition-all ${
-                  formData.potSize === size.id
+                onClick={() => handleFieldChange('potSize', size.id)}
+                className={`cursor-pointer border rounded-md p-3 text-center transition-all ${formData.potSize === size.id
                     ? 'border-green-600 bg-green-50'
                     : 'border-gray-200 hover:border-green-300'
-                }`}
+                  }`}
                 role="button"
                 tabIndex={0}
                 aria-pressed={formData.potSize === size.id}
@@ -203,6 +224,77 @@ const PlantDetailsForm = ({ formData, onChange, plantTypeId }) => {
                 {size.label}
               </div>
             ))}
+          </div>
+        </div>
+
+        <div className="care-preferences-section">
+          <div className="preference-cards">
+            {/* Watering Frequency */}
+            <div className={`preference-card ${errors.wateringFrequency ? 'error' : ''}`}>
+              <div className="preference-header">
+                <div className="water-icon">
+                  <FaTint />
+                </div>
+                <label>Watering Frequency*</label>
+              </div>
+              <select
+                value={formData.wateringFrequency}
+                onChange={(e) => handleFieldChange('wateringFrequency', e.target.value)}
+                className="preference-select"
+              >
+                {wateringOptions.map(opt => (
+                  <option key={opt.id} value={opt.id}>{opt.label}</option>
+                ))}
+              </select>
+              {errors.wateringFrequency && (
+                <span className="error-message">
+                  <FaExclamationCircle /> {errors.wateringFrequency}
+                </span>
+              )}
+            </div>
+
+            {/* Sunlight Exposure */}
+            <div className={`preference-card ${errors.sunlightExposure ? 'error' : ''}`}>
+              <div className="prefeature-arrow">
+                <div className="sun-icon">
+                  <FaSun />
+                </div>
+                <label>Sunlight Exposure*</label>
+              </div>
+              <select
+                value={formData.sunlightExposure}
+                onChange={(e) => handleFieldChange('sunlightExposure', e.target.value)}
+                className="preference-select"
+              >
+                {sunlightOptions.map(opt => (
+                  <option key={opt.id} value={opt.id}>{opt.label}</option>
+                ))}
+              </select>
+              {errors.sunlightExposure && (
+                <span className="error-message">
+                  <FaExclamationCircle /> {errors.sunlightExposure}
+                </span>
+              )}
+            </div>
+
+            {/* Fertilization Schedule */}
+            <div className="preference-card">
+              <div className="preference-header">
+                <div className="leaf-icon">
+                  <FaLeaf />
+                </div>
+                <label>Fertilization Schedule</label>
+              </div>
+              <select
+                value={formData.fertilizationSchedule}
+                onChange={(e) => handleFieldChange('fertilizationSchedule', e.target.value)}
+                className="preference-select"
+              >
+                {fertilizationOptions.map(opt => (
+                  <option key={opt.id} value={opt.id}>{opt.label}</option>
+                ))}
+              </select>
+            </div>
           </div>
         </div>
 
@@ -217,9 +309,8 @@ const PlantDetailsForm = ({ formData, onChange, plantTypeId }) => {
             value={formData.acquisitionDate || ''}
             onChange={(e) => onChange('acquisitionDate', e.target.value)}
             onBlur={() => handleBlur('acquisitionDate')}
-            className={`w-full px-4 py-2 border rounded-md focus:ring-green-500 focus:border-green-500 ${
-              errors.acquisitionDate ? 'border-red-500' : 'border-gray-300'
-            }`}
+            className={`w-full px-4 py-2 border rounded-md focus:ring-green-500 focus:border-green-500 ${errors.acquisitionDate ? 'border-red-500' : 'border-gray-300'
+              }`}
             max={new Date().toISOString().split('T')[0]}
             aria-describedby={errors.acquisitionDate ? "date-error" : ""}
           />
@@ -237,16 +328,16 @@ const PlantDetailsForm = ({ formData, onChange, plantTypeId }) => {
               Skip avatar customization
             </label>
             <div className="relative inline-block w-10 mr-2 align-middle select-none">
-              <input 
-                type="checkbox" 
-                id="quickAdd" 
-                name="quickAdd" 
+              <input
+                type="checkbox"
+                id="quickAdd"
+                name="quickAdd"
                 className="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer"
                 onChange={(e) => onChange('quickAdd', e.target.checked)}
                 checked={formData.quickAdd || false}
               />
-              <label 
-                htmlFor="quickAdd" 
+              <label
+                htmlFor="quickAdd"
                 className="toggle-label block overflow-hidden h-6 rounded-full bg-gray-300 cursor-pointer"
               ></label>
             </div>

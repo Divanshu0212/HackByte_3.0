@@ -6,12 +6,13 @@ import AvatarCustomization from './AvatarCustomization';
 import SuccessConfirmation from './SuccessConfirmation';
 import ProgressIndicator from './ProgressIndicator';
 import { usePlants } from '../../context/PlantContext';
+import { AppContent } from '../../context/AppContext';
 import '../../styles/AddPlantFlow.css';
-
-import axios from 'axios';
+import axios from 'axios'
 
 const AddPlantFlow = () => {
   const navigate = useNavigate();
+  const { authToken } = useContext(AppContent);
   const {
     plantTypes,
     isLoading: contextLoading,
@@ -29,6 +30,10 @@ const AddPlantFlow = () => {
     location: 'indoor',
     potSize: 'medium',
     acquisitionDate: new Date().toISOString().split('T')[0],
+    wateringFrequency: 'weekly',
+    sunlightExposure: 'partial',
+    fertilizationSchedule: 'monthly',
+    notes: '',
     avatarVariant: 1,
     avatarColor: 'default',
     avatarFile: null
@@ -40,7 +45,6 @@ const AddPlantFlow = () => {
 
   const totalSteps = isQuickAdd ? 2 : 3;
 
-  // Fetch plant types on mount
   useEffect(() => {
     if (plantTypes.length === 0) {
       fetchPlantTypes();
@@ -49,7 +53,6 @@ const AddPlantFlow = () => {
 
   const handleNext = async () => {
     const newErrors = validateStep(currentStep);
-
     if (Object.keys(newErrors).length === 0) {
       if (currentStep === totalSteps) {
         await handleSubmit();
@@ -107,6 +110,12 @@ const AddPlantFlow = () => {
 
       if (!formData.acquisitionDate) {
         newErrors.acquisitionDate = 'Please enter when you got this plant';
+      }
+      if (!formData.wateringFrequency) {
+        newErrors.wateringFrequency = 'Select watering frequency';
+      }
+      if (!formData.sunlightExposure) {
+        newErrors.sunlightExposure = 'Select sunlight exposure';
       }
     }
 
