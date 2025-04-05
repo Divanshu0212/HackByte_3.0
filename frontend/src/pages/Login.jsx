@@ -107,7 +107,7 @@ const Login = () => {
                 if (data.success) {
                     setIsLoggedIn(true);
                     getUserData();
-                    navigate('/');
+                    navigate('/dashboard');
                     toast.success(data.message || 'Login successful!');
                 }
             }
@@ -131,7 +131,7 @@ const Login = () => {
     return (
         <div className="flex items-center justify-center min-h-screen px-6 sm:px-0 bg-gradient-to-br from-plant-green-lightest to-earth-light">
             <img
-                onClick={() => navigate('/')}
+                onClick={() => navigate('/dashboard')}
                 src={assets.logo}
                 alt="Plant Care Logo"
                 className="absolute left-5 sm:left-20 top-5 w-28 sm:w-32 cursor-pointer"

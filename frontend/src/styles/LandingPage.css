@@ -1,0 +1,259 @@
+/* LandingPage.css */
+:root {
+  --primary-color: #689F38;
+  --primary-light: #9CCC65;
+  --primary-dark: #33691E;
+  --accent-color: #AFB42B;
+  --text-color: #424242;
+  --background-color: #F1F8E9;
+  --card-color: #FFFFFF;
+  --shadow-color: rgba(0, 0, 0, 0.08);
+  --transition-speed: 0.3s;
+  --font-primary: 'Roboto', sans-serif;
+  --font-secondary: 'Open Sans', sans-serif;
+  --plant-green-dark: #388e3c;
+  --warning: #ffc107; /* Assuming you have a warning color defined */
+  --text-secondary: #6c757d; /* Assuming you have a secondary text color */
+}
+
+body {
+  font-family: var(--font-secondary);
+}
+
+.landing-page {
+  font-family: var(--font-primary);
+  color: var(--text-color);
+  background-color: var(--background-color);
+  background-image: linear-gradient(135deg, rgba(255, 255, 255, 0.7) 0%, rgba(220, 237, 223, 0.6) 100%);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.6s ease-in-out, transform 0.6s ease-in-out;
+}
+
+.landing-page.animated {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.landing-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem 3rem;
+  background-color: rgba(255, 255, 255, 0.95);
+  box-shadow: 0 2px 12px var(--shadow-color);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.logo-container {
+  display: flex;
+  align-items: center;
+}
+
+.logo-text {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--plant-green-dark);
+}
+
+.language-selector {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.language-button {
+  padding: 0.6rem 1.2rem;
+  background-color: transparent;
+  border: 1px solid var(--primary-light);
+  border-radius: 25px;
+  cursor: pointer;
+  font-size: 0.95rem;
+  transition: all var(--transition-speed);
+  color: var(--text-color);
+}
+
+.language-button:hover {
+  background-color: var(--primary-light);
+  color: white;
+  border-color: var(--primary-light);
+}
+
+.language-button.active {
+  background-color: var(--primary-color);
+  color: white;
+  border-color: var(--primary-color);
+}
+
+.content-container {
+  display: flex;
+  flex: 1;
+  padding: 3rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  /* Remove align-items: center and gap here */
+  /* We will control centering with the center-content class */
+}
+
+.content-container.center-content {
+  justify-content: center; /* Center horizontally */
+  align-items: center; /* Center vertically */
+}
+
+@media (max-width: 992px) {
+  .content-container {
+    padding: 2rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .content-container {
+    padding: 1.5rem;
+  }
+
+  .landing-nav {
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1.5rem;
+  }
+
+  .language-selector {
+    width: 100%;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+}
+
+.dashboard-greeting {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.greeting-image {
+  width: 144px; /* Equivalent to 36 * 4 */
+  height: 144px;
+  border-radius: 50%;
+  margin-bottom: 1.5rem;
+}
+
+.greeting-title {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 2rem; /* Slightly smaller than your header's dashboard title */
+  font-weight: 500;
+  color: var(--text-color);
+  margin-bottom: 0.5rem;
+}
+
+.wave-hand-icon {
+  width: 2rem;
+  height: 2rem;
+}
+
+.greeting-subtitle {
+  font-size: 2.5rem; /* Slightly smaller */
+  font-weight: 600;
+  color: var(--plant-green-dark);
+  margin-bottom: 1rem;
+}
+
+.greeting-description {
+  margin-bottom: 2rem;
+  max-width: 80%;
+  color: var(--text-secondary);
+}
+
+.greeting-button {
+  padding: 1rem 2rem;
+  font-size: 1.1rem;
+}
+
+.landing-footer {
+  background-color: rgba(255, 255, 255, 0.95);
+  padding: 2rem;
+  margin-top: auto;
+  box-shadow: 0 -2px 12px var(--shadow-color);
+}
+
+.footer-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+@media (max-width: 768px) {
+  .footer-content {
+    flex-direction: column;
+    gap: 1rem;
+    text-align: center;
+  }
+
+  .greeting-title {
+    font-size: 1.75rem;
+  }
+
+  .greeting-subtitle {
+    font-size: 2rem;
+  }
+
+  .greeting-description {
+    max-width: 95%;
+  }
+
+  .greeting-image {
+    width: 120px;
+    height: 120px;
+  }
+}
+
+.social-links {
+  display: flex;
+  gap: 1.2rem;
+}
+
+.social-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: var(--primary-light);
+  color: white;
+  text-decoration: none;
+  transition: all var(--transition-speed);
+  box-shadow: 0 2px 5px var(--shadow-color);
+}
+
+.social-link:hover {
+  background-color: var(--primary-color);
+  transform: translateY(-3px);
+  box-shadow: 0 4px 8px var(--shadow-color);
+}
+
+.footer-copyright {
+  font-size: 0.9rem;
+  color: #777;
+}
+
+/* Placeholder for your existing animations - ensure these are defined elsewhere or add them here */
+@keyframes animate-header-image {
+  /* Your animation keyframes */
+}
+
+@keyframes animate-text-fade {
+  /* Your animation keyframes */
+}
+
+@keyframes animate-text-slide {
+  /* Your animation keyframes */
+}
