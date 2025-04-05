@@ -1,0 +1,60 @@
+/* src/pages/LandingPage.css */
+.landing-page {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: #f7f7f7;
+  color: #333;
+}
+
+.landing-header {
+  background-color: #e0f2f7; /* Light blue-green */
+  padding: 40px 20px;
+  text-align: center;
+}
+
+.landing-header h1 {
+  font-size: 2.5rem;
+  margin-bottom: 10px;
+  color: #2e7d32; /* Dark green */
+}
+
+.landing-header p {
+  font-size: 1.1rem;
+  color: #666;
+}
+
+.landing-main {
+  flex-grow: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+
+.call-to-action {
+  text-align: center;
+}
+
+.login-button {
+  display: inline-block;
+  padding: 15px 30px;
+  font-size: 1.2rem;
+  text-decoration: none;
+  color: white;
+  background-color: #4caf50; /* Green */
+  border-radius: 8px;
+  transition: background-color 0.3s ease;
+}
+
+.login-button:hover {
+  background-color: #388e3c; /* Darker green */
+}
+
+.landing-footer {
+  background-color: #f0f0f0;
+  padding: 20px;
+  text-align: center;
+  color: #777;
+  font-size: 0.9rem;
+}
