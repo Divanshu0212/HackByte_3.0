@@ -254,7 +254,7 @@ const Login = () => {
                     {/* Cloudflare Turnstile Widget */}
                     <div className="mb-4 flex justify-center">
                         <Turnstile
-                            sitekey="0x4AAAAAABD1iQKPVltwxRGa" // Replace with your actual site key
+                            sitekey={import.meta.env.VITE_CLOUDFLARE_TURNSTILE_SITE_KEY} // Replace with your actual site key
                             onVerify={handleTurnstileVerify}
                             onExpire={handleTurnstileExpire}
                             onError={handleTurnstileError}
