@@ -65,7 +65,7 @@ const Navbar = () => {
   };
 
   const navItems = [
-    { name: 'Home', path: '/', icon: <HomeIcon className="w-6 h-6" /> },
+    { name: 'Home', path:(userData ? '/dashboard': '/'), icon: <HomeIcon className="w-6 h-6" /> },
     { name: 'My Plants', path: '/plants', icon: <PlantIcon className="w-6 h-6" /> },
     { name: 'Reminders', path: '/reminders', icon: <NotificationIcon className="w-6 h-6" /> },
     { name: 'Schedule', path: '/schedule', icon: <ScheduleIcon className="w-6 h-6" /> },

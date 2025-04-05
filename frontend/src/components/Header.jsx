@@ -16,7 +16,8 @@ const Header = () => {
       '/plants': 'My Plants',
       '/reminders': 'Reminders',
       '/schedule': 'Schedule',
-      '/profile': 'Profile'
+      '/profile': 'Profile',
+      '/health' : 'Health'
     };
 
     return routes[pathname] || 'Page';

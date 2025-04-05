@@ -43,6 +43,7 @@ import RewardToast from './components/Rewards/RewardToast';
 // Test components
 import PlantHealthCheck from './pages/plantHealth.jsx';
 import Emotion from './pages/Emotion.jsx';
+import ChatNavigation from './components/Navigation/ChatNavigation.jsx';
 
 // Page components
 const SchedulePage = () => <div>Schedule Page</div>;
@@ -52,19 +53,19 @@ const PlantsPage = () => <PlantsDashboard />;
 const PageTransition = ({ children }) => {
     const location = useLocation();
 
-    return (
-        <AnimatePresence mode="wait">
-            <motion.div
-                key={location.pathname}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -20 }}
-                transition={{ duration: 0.3 }}
-            >
-                {children}
-            </motion.div>
-        </AnimatePresence>
-    );
+  return (
+    <AnimatePresence mode="wait">
+      <motion.div
+        key={location.pathname}
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        exit={{ opacity: 0, y: -20 }}
+        transition={{ duration: 0.3 }}
+      >
+        {children}
+      </motion.div>
+    </AnimatePresence>
+  );
 };
 
 function App() {

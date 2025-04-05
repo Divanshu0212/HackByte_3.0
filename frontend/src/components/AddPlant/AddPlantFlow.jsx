@@ -1,13 +1,13 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import PlantTypeSelection from './PlantTypeSelection';
-import PlantDetailsForm from './PlantDetailsForm';
+import PlantDetailsForm from './PLantDetailsForm';
 import AvatarCustomization from './AvatarCustomization';
 import SuccessConfirmation from './SuccessConfirmation';
 import ProgressIndicator from './ProgressIndicator';
 import { usePlants } from '../../context/PlantContext';
 import { AppContent } from '../../context/AppContext';
-import '../../styles/AddPlantFlow.css';
+import './AddPlantFlow1.css';
 import axios from 'axios'
 
 const AddPlantFlow = () => {
