@@ -26,7 +26,7 @@ app = Flask(__name__)
 
 # Configure CORS: Enable CORS for all routes initially.
 # Allow credentials needed for Session-ID potentially
-CORS(app, resources={r"/api/*": {"origins": "http://localhost:5173"}}, supports_credentials=True)
+CORS(app, resources={r"/api/*": {"origins": "http://localhost:5173"}})
 
 
 # --- Machine Learning Model (Plant Health Prediction) ---
@@ -45,7 +45,7 @@ ml_model_loaded = False # Flag to track ML model loading status
 # Load the ML model at startup
 def load_ml_model():
     global rf_classifier, ml_model_loaded
-    model_path = 'rf_plant_health_model.pkl' # Ensure this path is correct
+    model_path = r'C:\Users\divan\Desktop\compe\HackByte_3.0\models\monitor\rf_plant_health_model.pkl' # Ensure this path is correct
 
     if os.path.exists(model_path):
         try:

@@ -1,4 +1,3 @@
-// src/components/AddPlant/PlantDetailsForm.jsx
 import React, { useState, useEffect } from 'react';
 import { usePlantTypes } from '../../context/PlantContext';
 
@@ -90,11 +89,6 @@ const PlantDetailsForm = ({ formData, onChange, plantTypeId }) => {
         <p><span className="font-semibold">Care Level:</span> {careInfo.careLevel}</p>
       </div>
     );
-  };
-
-  const handleQuickAddToggle = (e) => {
-    onToggleQuickAdd(e.target.checked);
-    onChange('quickAdd', e.target.checked); // Update form data
   };
 
   return (
@@ -263,7 +257,7 @@ const PlantDetailsForm = ({ formData, onChange, plantTypeId }) => {
         </div>
       </div>
 
-      <style jsx>{`
+      <style>{`
         .toggle-checkbox:checked {
           right: 0;
           border-color: #68D391;

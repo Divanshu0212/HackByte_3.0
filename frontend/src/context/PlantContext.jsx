@@ -1,9 +1,14 @@
-import React, { createContext, useContext, useEffect, useState, useCallback } from 'react';
+// PlantContext.js
+import { createContext, useContext, useEffect, useState } from 'react';
 import axios from 'axios';
+import { toast } from 'react-toastify';
 
 const PlantContext = createContext();
 
 export const PlantProvider = ({ children }) => {
+  const backendUrl = import.meta.env.VITE_BACKEND_URL
+  // Using backendUrl from AppContext
+
   const [plantTypes, setPlantTypes] = useState([
     { id: 'apple', name: 'Apple', scientificName: 'Malus domestica', careLevel: 'Moderate', waterFrequency: 'Weekly', lightNeeds: 'Full sun' },
     { id: 'chili', name: 'Chili', scientificName: 'Capsicum annuum', careLevel: 'Easy', waterFrequency: 'When soil is dry', lightNeeds: 'Full sun' },
@@ -24,23 +29,36 @@ export const PlantProvider = ({ children }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  // Get plant type by ID
-  const getPlantTypeById = useCallback((id) => {
+  // const fetchPlantTypes = async () => {
+  //   setIsLoading(true);
+  //   try {
+  //     const { data } = await axios.get(`${backendUrl}/api/plants/types`);
+  //     if (data.success) {
+  //       setPlantTypes(data.plantTypes);
+  //     } else {
+  //       toast.error(data.message);
+  //     }
+  //   } catch (error) {
+  //     setError(error);
+  //     toast.error(error.message);
+  //   } finally {
+  //     setIsLoading(false);
+  //   }
+  // };
+
+  const getPlantTypeById = (id) => {
     return plantTypes.find(plant => plant.id === id) || null;
-  }, [plantTypes]);
+  };
 
-  // Get plant type by name
-  const getPlantTypeByName = useCallback((name) => {
+  const getPlantTypeByName = (name) => {
     return plantTypes.find(plant => plant.name.toLowerCase() === name.toLowerCase()) || null;
-  }, [plantTypes]);
+  };
 
-  // Get all plant names for dropdowns/selectors
-  const getAllPlantNames = useCallback(() => {
+  const getAllPlantNames = () => {
     return plantTypes.map(plant => plant.name);
-  }, [plantTypes]);
+  };
 
-  // Get plant care information
-  const getPlantCareInfo = useCallback((plantId) => {
+  const getPlantCareInfo = (plantId) => {
     const plant = getPlantTypeById(plantId);
     if (!plant) return null;
     
@@ -49,59 +67,19 @@ export const PlantProvider = ({ children }) => {
       waterFrequency: plant.waterFrequency,
       lightNeeds: plant.lightNeeds
     };
-  }, [getPlantTypeById]);
+  };
 
-  // const fetchPlantTypes = useCallback(async () => {
-  //   setIsLoading(true);
-  //   setError(null);
-  //   try {
-  //     console.log('Fetching plant types...');
-  //     const response = await axios.get('/api/plants/types');
-      
-  //     console.log('API Response:', response);
-  //     console.log('Response Data:', response.data);
-      
-  //     let plants = [];
-  //     if (Array.isArray(response.data)) {
-  //       plants = response.data;
-  //     } else if (response.data?.data && Array.isArray(response.data.data)) {
-  //       plants = response.data.data;
-  //     } else if (response.data?.plants && Array.isArray(response.data.plants)) {
-  //       plants = response.data.plants;
-  //     } else {
-  //       console.warn('Unexpected API response format:', response.data);
-  //     }
-      
-  //     console.log('Processed plants:', plants);
-  //     // setPlantTypes(plants);
-  //   } catch (err) {
-  //     console.error('API Error:', err);
-  //     setError(err.response?.data?.message || err.message || 'Failed to fetch plant types');
-  //     // setPlantTypes([]);
-  //   } finally {
-  //     setIsLoading(false);
-  //   }
-  // }, []);
-
-  const addPlant = useCallback(async (plantData) => {
+  const addPlant = async (plantData) => {
     setIsLoading(true);
-    setError(null);
     try {
-      const token = localStorage.getItem('token');
-      console.log('Token from storage:', token); // Debug log
-      
-      if (!token) {
-        throw new Error('Authentication required - No token found');
-      }
-  
       const formData = new FormData();
-      // Append all plant data
       formData.append('plantType', plantData.plantType?.id || plantData.plantType);
       formData.append('nickname', plantData.nickname);
       formData.append('condition', plantData.condition);
       formData.append('location', plantData.location);
       formData.append('potSize', plantData.potSize);
       formData.append('acquisitionDate', plantData.acquisitionDate);
+      formData.append('isQuickAdd', plantData.isQuickAdd);
       
       if (!plantData.isQuickAdd) {
         formData.append('avatarVariant', plantData.avatarVariant);
@@ -110,56 +88,54 @@ export const PlantProvider = ({ children }) => {
         
         if (plantData.avatarFile) {
           formData.append('avatar', plantData.avatarFile);
-          console.log('Avatar file appended:', plantData.avatarFile.name); // Debug log
         }
       }
-  
-      const response = await axios.post('http://localhost:5173/api/plants/upload', formData, {
+
+      const { data } = await axios.post(`${backendUrl}/api/plants/upload`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
           'Authorization': `Bearer ${localStorage.getItem('token')}`
         }
       });
-  
-      console.log('API Response:', response); // Debug log
-      return response.data;
-    } catch (err) {
-      console.error('Error adding plant:', err); // Debug log
-      let errorMsg = 'Failed to add plant';
-      if (err.response) {
-        errorMsg = err.response.data?.message || 
-                  err.response.data?.error?.message || 
-                  'Failed to add plant';
-        console.error('Response error:', err.response.data); // Debug log
+
+      if (data.success) {
+        toast.success('Plant added successfully!');
+        return data.plant;
       }
-      setError(errorMsg);
-      throw new Error(errorMsg);
+      toast.error(data.message);
+      return null;
+    } catch (error) {
+      setError(error);
+      toast.error(error.response?.data?.message || error.message || 'Failed to add plant');
+      return null;
     } finally {
       setIsLoading(false);
     }
-  }, []);
+  };
 
   // useEffect(() => {
   //   fetchPlantTypes();
-  // }, [fetchPlantTypes]);
+  // }, []);
+
+  const value = {
+    plantTypes,
+    isLoading,
+    error,
+    addPlant,
+    getPlantTypeById,
+    getPlantTypeByName,
+    getAllPlantNames,
+    getPlantCareInfo
+  };
 
   return (
-    <PlantContext.Provider value={{
-      plantTypes,
-      isLoading,
-      error,
-      addPlant,
-      // New utility functions
-      getPlantTypeById,
-      getPlantTypeByName,
-      getAllPlantNames,
-      getPlantCareInfo
-    }}>
+    <PlantContext.Provider value={value}>
       {children}
     </PlantContext.Provider>
   );
 };
 
+// Main hook to access all plant context
 export const usePlants = () => {
   const context = useContext(PlantContext);
   if (!context) {
@@ -168,9 +144,15 @@ export const usePlants = () => {
   return context;
 };
 
-// Additional hook for easy plant type access
+// Specialized hook for plant type related functions
 export const usePlantTypes = () => {
-  const { plantTypes, getPlantTypeById, getPlantTypeByName, getAllPlantNames, getPlantCareInfo } = usePlants();
+  const { 
+    plantTypes, 
+    getPlantTypeById, 
+    getPlantTypeByName, 
+    getAllPlantNames, 
+    getPlantCareInfo 
+  } = usePlants();
   
   return {
     plantTypes,
