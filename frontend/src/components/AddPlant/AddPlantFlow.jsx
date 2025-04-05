@@ -8,14 +8,16 @@ import ProgressIndicator from './ProgressIndicator';
 import { usePlants } from '../../context/PlantContext';
 import '../../styles/AddPlantFlow.css';
 
+import axios from 'axios';
+
 const AddPlantFlow = () => {
   const navigate = useNavigate();
-  const { 
-    plantTypes, 
-    isLoading: contextLoading, 
-    error: contextError, 
-    fetchPlantTypes, 
-    addPlant 
+  const {
+    plantTypes,
+    isLoading: contextLoading,
+    error: contextError,
+    fetchPlantTypes,
+    addPlant
   } = usePlants();
 
   const [currentStep, setCurrentStep] = useState(1);
@@ -47,7 +49,7 @@ const AddPlantFlow = () => {
 
   const handleNext = async () => {
     const newErrors = validateStep(currentStep);
-    
+
     if (Object.keys(newErrors).length === 0) {
       if (currentStep === totalSteps) {
         await handleSubmit();
@@ -85,44 +87,77 @@ const AddPlantFlow = () => {
 
   const validateStep = (step) => {
     const newErrors = {};
-    
+
     if (step === 1) {
       if (!formData.plantType) {
         newErrors.plantType = 'Please select a plant type';
       }
     }
-    
+
     if (step === 2) {
       if (!formData.nickname.trim()) {
         newErrors.nickname = 'Please enter a nickname for your plant';
       } else if (formData.nickname.length > 30) {
         newErrors.nickname = 'Nickname must be 30 characters or less';
       }
-      
+
       if (!formData.location) {
         newErrors.location = 'Please select a location';
       }
-      
+
       if (!formData.acquisitionDate) {
         newErrors.acquisitionDate = 'Please enter when you got this plant';
       }
     }
-    
+
     return newErrors;
   };
 
   const handleSubmit = async () => {
     setIsSubmitting(true);
     setSubmitError(null);
-    
+
     try {
-      await addPlant(formData);
+      console.log('Form data before submit:', formData); // Debug log
+      console.log('Auth token:', localStorage.getItem('token')); // Debug log
+
+      const token = localStorage.getItem('token');
+
+      axios.get('http://localhost:5173/api/plants/upload', {
+        withCredentials: true,
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      })
+      .then(response => console.log("aryan",response.data))
+      .catch(error => console.error('Full error:', error));
+
+      if (!token) {
+        throw new Error('Please login to add plants');
+      }
+
+      if (!formData.plantType) {
+        throw new Error('Please select a plant type');
+      }
+      if (!formData.nickname.trim()) {
+        throw new Error('Please enter a nickname for your plant');
+      }
+
+      const plantData = {
+        ...formData,
+        isQuickAdd,
+        plantType: formData.plantType
+      };
+
+      const result = await addPlant(plantData);
+      console.log('Plant added successfully:', result); // Debug log
       setIsSuccess(true);
-      
+
       setTimeout(() => {
         navigate('/plants');
       }, 2000);
     } catch (error) {
+      console.error('Add plant error:', error); // Debug log
       setSubmitError(error.message || 'Failed to add plant. Please try again.');
     } finally {
       setIsSubmitting(false);
@@ -142,7 +177,7 @@ const AddPlantFlow = () => {
       return (
         <div className="text-center py-8 text-red-500">
           {contextError}
-          <button 
+          <button
             onClick={fetchPlantTypes}
             className="mt-4 px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700"
           >
@@ -195,7 +230,7 @@ const AddPlantFlow = () => {
   return (
     <div className="add-plant-container max-w-2xl mx-auto p-6">
       <h1 className="text-3xl font-bold text-green-800 mb-6">Add a New Plant</h1>
-      
+
       <div className="quick-add-toggle mb-4">
         <label className="flex items-center cursor-pointer">
           <input
@@ -208,46 +243,44 @@ const AddPlantFlow = () => {
           <span className="ml-2 text-gray-700">Quick Add Mode</span>
         </label>
         <p className="text-sm text-gray-500 mt-1">
-          {isQuickAdd 
-            ? "Skip avatar customization for faster setup" 
+          {isQuickAdd
+            ? "Skip avatar customization for faster setup"
             : "Enable for quicker plant setup (skips avatar customization)"}
         </p>
       </div>
-      
-      <ProgressIndicator 
-        currentStep={currentStep} 
-        totalSteps={totalSteps} 
+
+      <ProgressIndicator
+        currentStep={currentStep}
+        totalSteps={totalSteps}
       />
-      
+
       <div className="step-content py-6">
         {renderStepContent()}
       </div>
-      
+
       {submitError && (
         <div className="error-message text-red-500 mb-4 text-center">{submitError}</div>
       )}
-      
+
       <div className="flex justify-between mt-8">
         <button
           onClick={handleBack}
           disabled={currentStep === 1 || isSubmitting}
-          className={`px-6 py-2 rounded-lg ${
-            currentStep === 1 || isSubmitting
-              ? 'bg-gray-300 cursor-not-allowed'
-              : 'bg-gray-200 hover:bg-gray-300'
-          }`}
+          className={`px-6 py-2 rounded-lg ${currentStep === 1 || isSubmitting
+            ? 'bg-gray-300 cursor-not-allowed'
+            : 'bg-gray-200 hover:bg-gray-300'
+            }`}
         >
           Back
         </button>
-        
+
         <button
           onClick={handleNext}
           disabled={isSubmitting || contextLoading}
-          className={`px-6 py-2 rounded-lg text-white ${
-            isSubmitting || contextLoading
-              ? 'bg-green-400 cursor-not-allowed'
-              : 'bg-green-600 hover:bg-green-700'
-          }`}
+          className={`px-6 py-2 rounded-lg text-white ${isSubmitting || contextLoading
+            ? 'bg-green-400 cursor-not-allowed'
+            : 'bg-green-600 hover:bg-green-700'
+            }`}
         >
           {isSubmitting ? (
             <span className="flex items-center">

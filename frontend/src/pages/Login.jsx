@@ -88,6 +88,7 @@ const Login = () => {
                     password,
                     cfTurnstileResponse: turnstileToken
                 });
+                localStorage.setItem('token', turnstileToken);
 
                 if (data.success) {
                     setIsLoggedIn(true);
@@ -101,6 +102,7 @@ const Login = () => {
                     password,
                     cfTurnstileResponse: turnstileToken
                 });
+                localStorage.setItem('token', turnstileToken);
 
                 if (data.success) {
                     setIsLoggedIn(true);

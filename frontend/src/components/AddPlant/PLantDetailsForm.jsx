@@ -92,6 +92,11 @@ const PlantDetailsForm = ({ formData, onChange, plantTypeId }) => {
     );
   };
 
+  const handleQuickAddToggle = (e) => {
+    onToggleQuickAdd(e.target.checked);
+    onChange('quickAdd', e.target.checked); // Update form data
+  };
+
   return (
     <div>
       <h2 className="text-xl font-semibold text-green-800 mb-4">Plant Details</h2>

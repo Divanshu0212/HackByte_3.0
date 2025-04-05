@@ -51,82 +51,103 @@ export const PlantProvider = ({ children }) => {
     };
   }, [getPlantTypeById]);
 
-  const fetchPlantTypes = useCallback(async () => {
-    setIsLoading(true);
-    setError(null);
-    try {
-      console.log('Fetching plant types...');
-      const response = await axios.get('/api/plants/types');
+  // const fetchPlantTypes = useCallback(async () => {
+  //   setIsLoading(true);
+  //   setError(null);
+  //   try {
+  //     console.log('Fetching plant types...');
+  //     const response = await axios.get('/api/plants/types');
       
-      console.log('API Response:', response);
-      console.log('Response Data:', response.data);
+  //     console.log('API Response:', response);
+  //     console.log('Response Data:', response.data);
       
-      let plants = [];
-      if (Array.isArray(response.data)) {
-        plants = response.data;
-      } else if (response.data?.data && Array.isArray(response.data.data)) {
-        plants = response.data.data;
-      } else if (response.data?.plants && Array.isArray(response.data.plants)) {
-        plants = response.data.plants;
-      } else {
-        console.warn('Unexpected API response format:', response.data);
-      }
+  //     let plants = [];
+  //     if (Array.isArray(response.data)) {
+  //       plants = response.data;
+  //     } else if (response.data?.data && Array.isArray(response.data.data)) {
+  //       plants = response.data.data;
+  //     } else if (response.data?.plants && Array.isArray(response.data.plants)) {
+  //       plants = response.data.plants;
+  //     } else {
+  //       console.warn('Unexpected API response format:', response.data);
+  //     }
       
-      console.log('Processed plants:', plants);
-      // setPlantTypes(plants);
-    } catch (err) {
-      console.error('API Error:', err);
-      setError(err.response?.data?.message || err.message || 'Failed to fetch plant types');
-      // setPlantTypes([]);
-    } finally {
-      setIsLoading(false);
-    }
-  }, []);
+  //     console.log('Processed plants:', plants);
+  //     // setPlantTypes(plants);
+  //   } catch (err) {
+  //     console.error('API Error:', err);
+  //     setError(err.response?.data?.message || err.message || 'Failed to fetch plant types');
+  //     // setPlantTypes([]);
+  //   } finally {
+  //     setIsLoading(false);
+  //   }
+  // }, []);
 
   const addPlant = useCallback(async (plantData) => {
     setIsLoading(true);
     setError(null);
     try {
-      const formData = new FormData();
-      Object.entries(plantData).forEach(([key, value]) => {
-        if (key === 'avatarFile' && value) {
-          formData.append('avatar', value);
-        } else if (value !== undefined && value !== null) {
-          formData.append(key, value);
-        }
-      });
-
       const token = localStorage.getItem('token');
-      if (!token) throw new Error('Authentication required');
-
-      const response = await axios.post('/api/plants', formData, {
+      console.log('Token from storage:', token); // Debug log
+      
+      if (!token) {
+        throw new Error('Authentication required - No token found');
+      }
+  
+      const formData = new FormData();
+      // Append all plant data
+      formData.append('plantType', plantData.plantType?.id || plantData.plantType);
+      formData.append('nickname', plantData.nickname);
+      formData.append('condition', plantData.condition);
+      formData.append('location', plantData.location);
+      formData.append('potSize', plantData.potSize);
+      formData.append('acquisitionDate', plantData.acquisitionDate);
+      
+      if (!plantData.isQuickAdd) {
+        formData.append('avatarVariant', plantData.avatarVariant);
+        formData.append('avatarExpression', plantData.avatarExpression);
+        formData.append('avatarColor', plantData.avatarColor);
+        
+        if (plantData.avatarFile) {
+          formData.append('avatar', plantData.avatarFile);
+          console.log('Avatar file appended:', plantData.avatarFile.name); // Debug log
+        }
+      }
+  
+      const response = await axios.post('http://localhost:5173/api/plants/upload', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
-          'Authorization': `Bearer ${token}`
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
         }
       });
-
-      await fetchPlantTypes();
+  
+      console.log('API Response:', response); // Debug log
       return response.data;
     } catch (err) {
-      const errorMsg = err.response?.data?.message || err.message || 'Failed to add plant';
+      console.error('Error adding plant:', err); // Debug log
+      let errorMsg = 'Failed to add plant';
+      if (err.response) {
+        errorMsg = err.response.data?.message || 
+                  err.response.data?.error?.message || 
+                  'Failed to add plant';
+        console.error('Response error:', err.response.data); // Debug log
+      }
       setError(errorMsg);
-      throw errorMsg;
+      throw new Error(errorMsg);
     } finally {
       setIsLoading(false);
     }
-  }, [fetchPlantTypes]);
+  }, []);
 
-  useEffect(() => {
-    fetchPlantTypes();
-  }, [fetchPlantTypes]);
+  // useEffect(() => {
+  //   fetchPlantTypes();
+  // }, [fetchPlantTypes]);
 
   return (
     <PlantContext.Provider value={{
       plantTypes,
       isLoading,
       error,
-      fetchPlantTypes,
       addPlant,
       // New utility functions
       getPlantTypeById,
