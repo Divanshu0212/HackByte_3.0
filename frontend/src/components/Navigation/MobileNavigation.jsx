@@ -1,31 +1,38 @@
-// src/components/Navigation/MobileNavigation.jsx
-import React from 'react';
+import React, { useContext } from 'react';
 import { NavLink } from 'react-router-dom';
-import { Home, Leaf, Bell, Calendar, User } from 'lucide-react';
-import { useNotifications } from '../Notifications/NotificationContext';
-import NotificationBadge from '../Notifications/NotificationsBadge';
+import { Home, Leaf, Bell, Calendar, User, Plus, BriefcaseMedical, ScanFace} from 'lucide-react';
+import NotificationBadge from '../Notifications/NotificationsBadge.jsx';
+import { useNotifications } from '../Notifications/NotificationContext.jsx';
+import { AppContent } from '../../context/AppContext.jsx';
 
 const MobileNavigation = () => {
   const { unreadCount } = useNotifications();
-  
+  const { userData } = useContext(AppContent);
   const navItems = [
-    { path: "/", icon: <Home size={24} />, label: "Home" },
-    { path: "/plants", icon: <Leaf size={24} />, label: "Plants" },
+    { path: (userData ? '/dashboard': '/'), icon: <Home size={20} />, label: "Home" },
+    { path: "/plants", icon: <Leaf size={20} />, label: "Plants" },
     { 
       path: "/notifications", 
       icon: (
         <div className="relative">
-          <Bell size={24} />
+          <Bell size={20} />
           {unreadCount > 0 && <NotificationBadge />}
         </div>
       ), 
       label: "Notifications" 
     },
-    { path: "/schedule", icon: <Calendar size={24} />, label: "Schedule" },
-    { path: "/profile", icon: <User size={24} />, label: "Profile" }
+    { path: "/plant-avatars", icon: <ScanFace size={20} />, label: "Avatar" },
+    { path: "/schedule", icon: <Calendar size={20} />, label: "Schedule" },
+    { path: "/profile", icon: <User size={20} />, label: "Profile" },
+    { path: "/health", icon: <BriefcaseMedical size={20} />, label: "Health" }
   ];
 
   return (
+    <div>
+      <div className="top-5 left-5 fixed text-4xl animate-plant-wiggle text-plant-green-light w-10">
+        <img className='w-fit h-fit' src='logo.png' />
+
+      </div>
     <nav className="bg-white border-t border-gray-200 shadow-lg">
       <div className="flex justify-around">
         {navItems.map((item) => (
@@ -44,6 +51,7 @@ const MobileNavigation = () => {
         ))}
       </div>
     </nav>
+    </div>
   );
 };
 

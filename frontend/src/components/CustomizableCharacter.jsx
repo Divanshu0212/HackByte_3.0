@@ -52,7 +52,7 @@ const CustomizableCharacter = () => {
 
   return (
     <div className="flex flex-col items-center p-8 bg-gray-100 rounded-lg shadow-md">
-      <h2 className="text-2xl font-bold mb-6">Character Emotions</h2>
+      <h2 className="text-xl text-green-700 font-bold mb-6">Character Emotions</h2>
       
       <div className="mb-8 relative">
         {/* Character container with placeholder for your image */}
@@ -130,7 +130,7 @@ const CustomizableCharacter = () => {
       </div>
       
       {/* Emotion selector buttons */}
-      <div className="grid grid-cols-3 gap-4">
+      <div className="grid grid-cols-5 gap-4">
         <button 
           onClick={() => setEmotion('happy')}
           className={`px-4 py-2 rounded-md font-medium transition-colors ${

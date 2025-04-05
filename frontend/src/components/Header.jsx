@@ -29,24 +29,6 @@ const Header = () => {
 
   return (
     <div className="w-full flex flex-col items-start mt-2 md:mt-4">
-      <div className="w-full flex items-center justify-between mb-6">
-        <div>
-          <h1 className="font-primary text-2xl md:text-3xl font-bold text-plant-green-dark">
-            {getPageTitle(location.pathname)}
-          </h1>
-          <p className="font-secondary text-text-secondary">Let's take care of your plants today!</p>
-        </div>
-
-        <div className="flex items-center space-x-2">
-          <button className="p-2 rounded-full hover:bg-plant-green-lightest transition-colors duration-300">
-            <SearchIcon className="w-5 h-5 text-text-secondary" />
-          </button>
-          <button className="p-2 rounded-full hover:bg-plant-green-lightest transition-colors duration-300 relative">
-            <BellIcon className="w-5 h-5 text-text-secondary" />
-            <span className="absolute top-0 right-0 w-2 h-2 bg-warning rounded-full"></span>
-          </button>
-        </div>
-      </div>
 
       {location.pathname === '/dashboard' && (
         <div className='flex flex-col items-center text-center text-text-primary w-full'>
