@@ -1,6 +1,6 @@
 // src/components/AddPlant/SuccessConfirmation.jsx
 import React, { useEffect } from 'react';
-import '../../styles/AddPlantFlow.css'; // Import the external CSS file
+import './AddPlantFlow.css'; // Import the external CSS file
 
 const SuccessConfirmation = ({ plantName }) => {
   useEffect(() => {
