@@ -64,6 +64,9 @@ const PageTransition = ({ children }) => {
       >
         {children}
       </motion.div>
+      <div className="fixed bottom-8 right-8 z-50">
+        <ChatNavigation />
+      </div>
     </AnimatePresence>
   );
 };
