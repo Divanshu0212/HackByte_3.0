@@ -1,15 +1,23 @@
-// src/components/AddPlant/AddPlantFlow.jsx
-import React, { useState } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import PlantTypeSelection from './PlantTypeSelection';
 import PlantDetailsForm from './PlantDetailsForm';
 import AvatarCustomization from './AvatarCustomization';
 import SuccessConfirmation from './SuccessConfirmation';
 import ProgressIndicator from './ProgressIndicator';
+import { usePlants } from '../../context/PlantContext';
 import '../../styles/AddPlantFlow.css';
 
 const AddPlantFlow = () => {
   const navigate = useNavigate();
+  const { 
+    plantTypes, 
+    isLoading: contextLoading, 
+    error: contextError, 
+    fetchPlantTypes, 
+    addPlant 
+  } = usePlants();
+
   const [currentStep, setCurrentStep] = useState(1);
   const [isQuickAdd, setIsQuickAdd] = useState(false);
   const [formData, setFormData] = useState({
@@ -20,22 +28,29 @@ const AddPlantFlow = () => {
     potSize: 'medium',
     acquisitionDate: new Date().toISOString().split('T')[0],
     avatarVariant: 1,
-    avatarExpression: 'happy'
+    avatarColor: 'default',
+    avatarFile: null
   });
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
-  
-  // Number of total steps in the flow
+  const [submitError, setSubmitError] = useState(null);
+
   const totalSteps = isQuickAdd ? 2 : 3;
 
-  // Handle next step button
-  const handleNext = () => {
+  // Fetch plant types on mount
+  useEffect(() => {
+    if (plantTypes.length === 0) {
+      fetchPlantTypes();
+    }
+  }, [fetchPlantTypes, plantTypes.length]);
+
+  const handleNext = async () => {
     const newErrors = validateStep(currentStep);
     
     if (Object.keys(newErrors).length === 0) {
       if (currentStep === totalSteps) {
-        handleSubmit();
+        await handleSubmit();
       } else {
         setCurrentStep(currentStep + 1);
       }
@@ -44,14 +59,12 @@ const AddPlantFlow = () => {
     }
   };
 
-  // Handle back button
   const handleBack = () => {
     if (currentStep > 1) {
       setCurrentStep(currentStep - 1);
     }
   };
 
-  // Toggle quick add mode
   const toggleQuickAdd = () => {
     setIsQuickAdd(!isQuickAdd);
     if (!isQuickAdd && currentStep === 3) {
@@ -59,10 +72,8 @@ const AddPlantFlow = () => {
     }
   };
 
-  // Update form data
   const updateFormData = (data) => {
     setFormData(prev => ({ ...prev, ...data }));
-    // Clear any errors for the updated fields
     const updatedErrors = { ...errors };
     Object.keys(data).forEach(key => {
       if (updatedErrors[key]) {
@@ -72,7 +83,6 @@ const AddPlantFlow = () => {
     setErrors(updatedErrors);
   };
 
-  // Validate current step
   const validateStep = (step) => {
     const newErrors = {};
     
@@ -85,6 +95,8 @@ const AddPlantFlow = () => {
     if (step === 2) {
       if (!formData.nickname.trim()) {
         newErrors.nickname = 'Please enter a nickname for your plant';
+      } else if (formData.nickname.length > 30) {
+        newErrors.nickname = 'Nickname must be 30 characters or less';
       }
       
       if (!formData.location) {
@@ -99,40 +111,54 @@ const AddPlantFlow = () => {
     return newErrors;
   };
 
-  // Handle final submission
   const handleSubmit = async () => {
     setIsSubmitting(true);
+    setSubmitError(null);
     
     try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1500));
-      
-      // Here you would normally send the data to your backend
-      console.log('Submitting plant data:', formData);
-      
-      // Show success state
+      await addPlant(formData);
       setIsSuccess(true);
       
-      // Reset form after success
       setTimeout(() => {
         navigate('/plants');
       }, 2000);
     } catch (error) {
-      console.error('Error adding plant:', error);
-      setErrors({ submit: 'Failed to add plant. Please try again.' });
+      setSubmitError(error.message || 'Failed to add plant. Please try again.');
     } finally {
       setIsSubmitting(false);
     }
   };
 
-  // Render current step content
   const renderStepContent = () => {
+    if (contextLoading && currentStep === 1) {
+      return (
+        <div className="flex justify-center items-center p-12">
+          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-green-500"></div>
+        </div>
+      );
+    }
+
+    if (contextError) {
+      return (
+        <div className="text-center py-8 text-red-500">
+          {contextError}
+          <button 
+            onClick={fetchPlantTypes}
+            className="mt-4 px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700"
+          >
+            Retry
+          </button>
+        </div>
+      );
+    }
+
     switch (currentStep) {
       case 1:
         return (
           <PlantTypeSelection
+            plantTypes={plantTypes}
             selectedType={formData.plantType}
-            onSelectType={(type) => updateFormData({ plantType: type })}
+            onSelect={(type) => updateFormData({ plantType: type })}
             error={errors.plantType}
           />
         );
@@ -140,8 +166,10 @@ const AddPlantFlow = () => {
         return (
           <PlantDetailsForm
             formData={formData}
-            updateFormData={updateFormData}
+            onChange={(field, value) => updateFormData({ [field]: value })}
             errors={errors}
+            onToggleQuickAdd={toggleQuickAdd}
+            isQuickAdd={isQuickAdd}
           />
         );
       case 3:
@@ -149,8 +177,10 @@ const AddPlantFlow = () => {
           <AvatarCustomization
             plantType={formData.plantType}
             selectedVariant={formData.avatarVariant}
-            selectedExpression={formData.avatarExpression}
-            updateFormData={updateFormData}
+            selectedColor={formData.avatarColor}
+            onSelectVariant={(variant) => updateFormData({ avatarVariant: variant })}
+            onSelectColor={(color) => updateFormData({ avatarColor: color })}
+            onFileSelect={(file) => updateFormData({ avatarFile: file })}
           />
         );
       default:
@@ -158,7 +188,6 @@ const AddPlantFlow = () => {
     }
   };
 
-  // Show success confirmation when submission is complete
   if (isSuccess) {
     return <SuccessConfirmation plantName={formData.nickname} />;
   }
@@ -174,6 +203,7 @@ const AddPlantFlow = () => {
             checked={isQuickAdd}
             onChange={toggleQuickAdd}
             className="form-checkbox h-5 w-5 text-green-600"
+            disabled={isSubmitting}
           />
           <span className="ml-2 text-gray-700">Quick Add Mode</span>
         </label>
@@ -193,8 +223,8 @@ const AddPlantFlow = () => {
         {renderStepContent()}
       </div>
       
-      {errors.submit && (
-        <div className="error-message text-red-500 mb-4">{errors.submit}</div>
+      {submitError && (
+        <div className="error-message text-red-500 mb-4 text-center">{submitError}</div>
       )}
       
       <div className="flex justify-between mt-8">
@@ -212,9 +242,9 @@ const AddPlantFlow = () => {
         
         <button
           onClick={handleNext}
-          disabled={isSubmitting}
+          disabled={isSubmitting || contextLoading}
           className={`px-6 py-2 rounded-lg text-white ${
-            isSubmitting
+            isSubmitting || contextLoading
               ? 'bg-green-400 cursor-not-allowed'
               : 'bg-green-600 hover:bg-green-700'
           }`}
