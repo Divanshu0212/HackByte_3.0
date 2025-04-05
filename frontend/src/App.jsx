@@ -23,7 +23,7 @@ import NotificationsPage from './pages/NotificationsPage'; // Import the new Not
 import ProfilePage from './components/ProfilePage'; // Import the new ProfilePage component
 
 import ProfileSettingsPage from './pages/ProfileSettingsPage';
-import AddPlantPage from './pages/AddPlantPage';
+// import AddPlantPage from './pages/AddPlantPage';
 
 import { PlantChatProvider } from './components/PlantChatContext';
 import { NotificationProvider } from './components/Notifications/NotificationContext';

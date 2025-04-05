@@ -11,6 +11,13 @@ const userAuth = async (req, res, next) => {
         const tokenDecode = jwt.verify(token, process.env.JWT_SECRET);
 
         if (tokenDecode.id) {
+            // Set userId on the req object itself
+            req.userId = tokenDecode.id;
+            
+            // Initialize req.body if it doesn't exist
+            if (!req.body) req.body = {};
+            
+            // Also set it on req.body for backward compatibility
             req.body.userId = tokenDecode.id;
         } else {
             return res.json({ success: false, message: 'Not Authorized. Login Again' });
@@ -22,4 +29,4 @@ const userAuth = async (req, res, next) => {
     }
 };
 
-export default userAuth; // Correctly export userAuth
+export default userAuth;
