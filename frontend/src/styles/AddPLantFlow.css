@@ -1,4 +1,108 @@
 /* src/components/AddPlant/AddPlantFlow.css */
+/* Care Preferences Section */
+.care-preferences-section {
+  margin: 1.5rem 0;
+}
+
+.preference-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 1.2rem;
+}
+
+.preference-card {
+  background-color: #f8faf7;
+  border-radius: 12px;
+  padding: 1.2rem;
+  border: 1px solid #e0e7d6;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(46, 125, 50, 0.05);
+}
+
+.preference-card:hover {
+  border-color: #b8d8be;
+  box-shadow: 0 4px 12px rgba(46, 125, 50, 0.1);
+}
+
+.preference-card.error {
+  border-color: #ff6b6b;
+  background-color: #fff8f8;
+}
+
+.preference-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.8rem;
+}
+
+.preference-header label {
+  font-weight: 500;
+  color: #2e7d32;
+  margin-left: 0.5rem;
+  font-size: 0.9rem;
+}
+
+.water-icon,
+.sun-icon,
+.leaf-icon {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.water-icon {
+  background-color: #e3f2fd;
+  color: #1e88e5;
+}
+
+.sun-icon {
+  background-color: #fff8e1;
+  color: #ffa000;
+}
+
+.leaf-icon {
+  background-color: #e8f5e9;
+  color: #2e7d32;
+}
+
+.preference-select {
+  width: 100%;
+  padding: 0.6rem 1rem;
+  border: 1px solid #d0e0c8;
+  border-radius: 8px;
+  background-color: white;
+  color: #2d3a2d;
+  font-size: 0.9rem;
+  transition: border 0.3s;
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=US-ASCII, %3Csvg width='12' height %3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.7rem top 50%;
+  background-size: 0.65rem auto;
+}
+
+.preference-select:focus {
+  outline: none;
+  border-color: #81c784;
+  box-shadow: 0 0 0 2px rgba(129, 199, 132, 0.2);
+}
+
+.error-message {
+  display: flex;
+  align-items: center;
+  color: #d32f2f;
+  font-size: 0.8rem;
+  margin-top: 0.5rem;
+}
+
+.error-message svg {
+  margin-right: 0.3rem;
+  font-size: 0.9rem;
+}
+
 .add-plant-container {
   animation: slideIn 0.4s ease-out;
 }

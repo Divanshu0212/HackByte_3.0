@@ -4,7 +4,6 @@ import React, {useState, useEffect} from 'react'
 import {toast}  from 'react-toastify'
 import axios from 'axios';
 
-
 export const AppContent = createContext()
 
 export const AppContextProvider = (props) => {
@@ -38,6 +37,7 @@ const getAuthState = async () => {
   const getUserData = async () => {
     try {
         const { data } = await axios.get(backendUrl + '/api/user/data');
+        
         data.success ? setUserData(data.userData) : toast.error(data.message);
     } catch (error) {
         toast.error(error.message);

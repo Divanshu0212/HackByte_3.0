@@ -13,7 +13,7 @@ const app = express();
 const port = process.env.PORT || 4000;
 
 // Validate essential environment variables
-const requiredEnvVars = ['MONGODB_URI', 'JWT_SECRET'];
+const requiredEnvVars = ['MONGODB_URI', 'JWT_SECRET', 'CLOUDINARY_CLOUD_NAME', 'CLOUDINARY_API_KEY', 'CLOUDINARY_API_SECRET'];
 for (const envVar of requiredEnvVars) {
   if (!process.env[envVar]) {
     console.error(`Missing required environment variable: ${envVar}`);

@@ -251,10 +251,117 @@ const deletePlant = async (req, res) => {
   }
 };
 
+const updateCareMetric = async (plantId, metric, valueChange, actionName) => {
+  const plant = await Plant.findById(plantId);
+  if (!plant) {
+    throw new Error('Plant not found');
+  }
+
+  // Initialize careMetrics if not exists
+  if (!plant.careMetrics) {
+    plant.careMetrics = {
+      water: 0,
+      sunlight: 0,
+      fertilizer: 0,
+      temperature: 0
+    };
+  }
+
+  // Update the specific metric (clamped between 0-100)
+  plant.careMetrics[metric] = Math.min(100, Math.max(0, plant.careMetrics[metric] + valueChange));
+
+  // Add to care history
+  plant.careHistory = plant.careHistory || [];
+  plant.careHistory.push({
+    action: actionName,
+    date: new Date()
+  });
+
+  // Update last interaction time based on action
+  if (metric === 'water') {
+    plant.lastWatered = new Date();
+  }
+
+  await plant.save();
+  return plant;
+};
+
+const waterPlant = async (req, res) => {
+  try {
+    const plant = await updateCareMetric(req.params.id, 'water', 30, 'Watered');
+    res.status(200).json({
+      status: 'success',
+      data: {
+        plant
+      }
+    });
+  } catch (err) {
+    res.status(400).json({
+      status: 'fail',
+      message: err.message
+    });
+  }
+};
+
+const adjustSunlight = async (req, res) => {
+  try {
+    const plant = await updateCareMetric(req.params.id, 'sunlight', 25, 'Adjusted sunlight');
+    res.status(200).json({
+      status: 'success',
+      data: {
+        plant
+      }
+    });
+  } catch (err) {
+    res.status(400).json({
+      status: 'fail',
+      message: err.message
+    });
+  }
+};
+
+const fertilizePlant = async (req, res) => {
+  try {
+    const plant = await updateCareMetric(req.params.id, 'fertilizer', 20, 'Fertilized');
+    res.status(200).json({
+      status: 'success',
+      data: {
+        plant
+      }
+    });
+  } catch (err) {
+    res.status(400).json({
+      status: 'fail',
+      message: err.message
+    });
+  }
+};
+
+const adjustTemperature = async (req, res) => {
+  try {
+    const plant = await updateCareMetric(req.params.id, 'temperature', 15, 'Adjusted temperature');
+    res.status(200).json({
+      status: 'success',
+      data: {
+        plant
+      }
+    });
+  } catch (err) {
+    res.status(400).json({
+      status: 'fail',
+      message: err.message
+    });
+  }
+};
+
 export default {
   addPlant,
   getPlants,
   getPlantById,
   updatePlant,
-  deletePlant
+  deletePlant,
+  waterPlant,
+  adjustSunlight,
+  adjustTemperature,
+  fertilizePlant
 };
