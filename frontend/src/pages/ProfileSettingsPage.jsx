@@ -1,15 +1,20 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { motion } from 'framer-motion';
 import { toast } from 'react-toastify';
 import { FiUser, FiBell, FiMoon, FiSun, FiLock, FiSliders, FiHelpCircle, FiLogOut, FiChevronRight, FiEdit2, FiUpload } from 'react-icons/fi';
 import { RiPlantLine, RiLeafLine } from 'react-icons/ri';
+import { AppContent } from '../context/AppContext';
+import { FaCamera } from 'react-icons/fa'
 
 const ProfileSettingsPage = () => {
+  const { userData } = useContext(AppContent);
+  console.log(userData);
+
   // User state - in a real app, this would come from your auth context or API
   const [user, setUser] = useState({
-    name: 'Plant Lover',
-    email: 'plant.lover@example.com',
-    avatar: '/assets/avatars/default-user.png',
+    name: userData ? userData.name : 'Plant Enthusiast',
+    email: userData ? userData.email : 'plant.lover@example.com',
+    avatar: '/assets/avatars/default-user.png' || "",
     preferences: {
       notifications: {
         waterReminders: true,
@@ -23,6 +28,30 @@ const ProfileSettingsPage = () => {
     }
   });
 
+  const [profileImage, setProfileImage] = useState(null);
+  const [imageError, setImageError] = useState(false);
+
+  // Default avatar (can be local or from a reliable CDN)
+  const defaultAvatar = 'https://cdn.jsdelivr.net/gh/atomiclabs/cryptocurrency-icons@1a63530be6e374711a8554f31b17e4cb92c25fa5/svg/color/generic.svg';
+
+  const handleImageError = (e) => {
+    console.log('Image failed to load, using fallback');
+    setImageError(true);
+    e.target.src = defaultAvatar;
+  };
+
+  const handleImageUpload = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        setProfileImage(event.target.result);
+        setImageError(false);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
   // State for active section
   const [activeSection, setActiveSection] = useState('profile');
 
@@ -35,11 +64,11 @@ const ProfileSettingsPage = () => {
         theme
       }
     });
-    
+
     // Apply theme to document - in a real app you'd use a theme context
     document.documentElement.classList.remove('theme-light', 'theme-dark', 'theme-green');
     document.documentElement.classList.add(`theme-${theme}`);
-    
+
     toast.success(`Theme changed to ${theme} mode`);
   };
 
@@ -55,27 +84,9 @@ const ProfileSettingsPage = () => {
         }
       }
     });
-    
+
     const status = !user.preferences.notifications[key] ? 'enabled' : 'disabled';
     toast.info(`${key.charAt(0).toUpperCase() + key.slice(1)} notifications ${status}`);
-  };
-
-  // Handle avatar upload
-  const handleAvatarUpload = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      // In a real app, you'd upload the file to your server
-      // For demo purposes, we'll create a local URL
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setUser({
-          ...user, 
-          avatar: reader.result
-        });
-        toast.success('Profile picture updated');
-      };
-      reader.readAsDataURL(file);
-    }
   };
 
   // Handle logout
@@ -90,18 +101,18 @@ const ProfileSettingsPage = () => {
   // Animation variants
   const containerVariants = {
     hidden: { opacity: 0 },
-    visible: { 
+    visible: {
       opacity: 1,
-      transition: { 
-        staggerChildren: 0.05 
+      transition: {
+        staggerChildren: 0.05
       }
     }
   };
 
   const itemVariants = {
     hidden: { y: 20, opacity: 0 },
-    visible: { 
-      y: 0, 
+    visible: {
+      y: 0,
       opacity: 1,
       transition: { type: 'spring', stiffness: 100 }
     }
@@ -110,18 +121,18 @@ const ProfileSettingsPage = () => {
   return (
     <div className="max-w-4xl mx-auto p-4 pb-24">
       <h1 className="text-2xl font-bold text-green-800 mb-6">Settings</h1>
-      
+
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {/* Sidebar Navigation */}
         <div className="bg-white rounded-lg shadow p-4">
-          <motion.ul 
+          <motion.ul
             className="space-y-2"
             variants={containerVariants}
             initial="hidden"
             animate="visible"
           >
             <motion.li variants={itemVariants}>
-              <button 
+              <button
                 onClick={() => setActiveSection('profile')}
                 className={`flex items-center w-full p-3 rounded-lg text-left ${activeSection === 'profile' ? 'bg-green-100 text-green-800' : 'hover:bg-gray-100'}`}
               >
@@ -131,7 +142,7 @@ const ProfileSettingsPage = () => {
               </button>
             </motion.li>
             <motion.li variants={itemVariants}>
-              <button 
+              <button
                 onClick={() => setActiveSection('notifications')}
                 className={`flex items-center w-full p-3 rounded-lg text-left ${activeSection === 'notifications' ? 'bg-green-100 text-green-800' : 'hover:bg-gray-100'}`}
               >
@@ -141,7 +152,7 @@ const ProfileSettingsPage = () => {
               </button>
             </motion.li>
             <motion.li variants={itemVariants}>
-              <button 
+              <button
                 onClick={() => setActiveSection('appearance')}
                 className={`flex items-center w-full p-3 rounded-lg text-left ${activeSection === 'appearance' ? 'bg-green-100 text-green-800' : 'hover:bg-gray-100'}`}
               >
@@ -151,7 +162,7 @@ const ProfileSettingsPage = () => {
               </button>
             </motion.li>
             <motion.li variants={itemVariants}>
-              <button 
+              <button
                 onClick={() => setActiveSection('preferences')}
                 className={`flex items-center w-full p-3 rounded-lg text-left ${activeSection === 'preferences' ? 'bg-green-100 text-green-800' : 'hover:bg-gray-100'}`}
               >
@@ -161,7 +172,7 @@ const ProfileSettingsPage = () => {
               </button>
             </motion.li>
             <motion.li variants={itemVariants}>
-              <button 
+              <button
                 onClick={() => setActiveSection('account')}
                 className={`flex items-center w-full p-3 rounded-lg text-left ${activeSection === 'account' ? 'bg-green-100 text-green-800' : 'hover:bg-gray-100'}`}
               >
@@ -171,7 +182,7 @@ const ProfileSettingsPage = () => {
               </button>
             </motion.li>
             <motion.li variants={itemVariants}>
-              <button 
+              <button
                 onClick={() => setActiveSection('help')}
                 className={`flex items-center w-full p-3 rounded-lg text-left ${activeSection === 'help' ? 'bg-green-100 text-green-800' : 'hover:bg-gray-100'}`}
               >
@@ -181,7 +192,7 @@ const ProfileSettingsPage = () => {
               </button>
             </motion.li>
             <motion.li variants={itemVariants}>
-              <button 
+              <button
                 onClick={handleLogout}
                 className="flex items-center w-full p-3 rounded-lg text-left text-red-600 hover:bg-red-50"
               >
@@ -191,7 +202,7 @@ const ProfileSettingsPage = () => {
             </motion.li>
           </motion.ul>
         </div>
-        
+
         {/* Content Area */}
         <div className="md:col-span-2 bg-white rounded-lg shadow p-6">
           {/* Profile Section */}
@@ -203,47 +214,52 @@ const ProfileSettingsPage = () => {
               className="space-y-6"
             >
               <motion.h2 variants={itemVariants} className="text-xl font-medium text-gray-800">Your Profile</motion.h2>
-              
+
               <motion.div variants={itemVariants} className="flex flex-col items-center">
-                <div className="relative">
-                  <img 
-                    src={user.avatar} 
-                    alt="Profile" 
-                    className="w-32 h-32 rounded-full object-cover border-4 border-green-100"
-                    onError={(e) => {
-                      e.target.src = 'https://via.placeholder.com/150?text=User';
-                    }}
-                  />
-                  <label className="absolute bottom-0 right-0 bg-green-500 p-2 rounded-full text-white cursor-pointer shadow-lg hover:bg-green-600 transition-colors">
-                    <FiEdit2 />
-                    <input type="file" className="hidden" onChange={handleAvatarUpload} accept="image/*" />
-                  </label>
+                <div className="avatar-upload">
+                  <div className="avatar-preview">
+                    <img
+                      src={profileImage || (imageError ? defaultAvatar : `https://via.placeholder.com/150?text=User`)}
+                      alt="User Avatar"
+                      onError={handleImageError}
+                      className="profile-avatar"
+                    />
+                    <label htmlFor="avatar-upload" className="upload-button">
+                      <FaCamera className="camera-icon" />
+                      <input
+                        id="avatar-upload"
+                        type="file"
+                        accept="image/*"
+                        onChange={handleImageUpload}
+                        style={{ display: 'none' }}
+                      />
+                    </label>
+                  </div>
                 </div>
                 <h3 className="mt-4 text-lg font-medium">{user.name}</h3>
-                <p className="text-gray-500">{user.email}</p>
               </motion.div>
-              
+
               <motion.div variants={itemVariants} className="space-y-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">Name</label>
-                  <input 
-                    type="text" 
+                  <input
+                    type="text"
                     value={user.name}
-                    onChange={(e) => setUser({...user, name: e.target.value})}
+                    onChange={(e) => setUser({ ...user, name: e.target.value })}
                     className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-none"
                   />
                 </div>
-                
-                <div>
+
+                {/* <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
-                  <input 
-                    type="email" 
+                  <input
+                    type="email"
                     value={user.email}
-                    onChange={(e) => setUser({...user, email: e.target.value})}
+                    onChange={(e) => setUser({ ...user, email: e.target.value })}
                     className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-none"
                   />
-                </div>
-                
+                </div> */}
+
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">About</label>
                   <textarea
@@ -252,14 +268,14 @@ const ProfileSettingsPage = () => {
                     className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-none"
                   ></textarea>
                 </div>
-                
+
                 <button className="bg-green-600 hover:bg-green-700 text-white font-medium py-2 px-4 rounded-lg transition-colors">
                   Save Changes
                 </button>
               </motion.div>
             </motion.div>
           )}
-          
+
           {/* Notifications Section */}
           {activeSection === 'notifications' && (
             <motion.div
@@ -269,7 +285,7 @@ const ProfileSettingsPage = () => {
               className="space-y-6"
             >
               <motion.h2 variants={itemVariants} className="text-xl font-medium text-gray-800">Notification Preferences</motion.h2>
-              
+
               <motion.div variants={itemVariants} className="space-y-4">
                 <div className="flex items-center justify-between">
                   <div>
@@ -277,9 +293,9 @@ const ProfileSettingsPage = () => {
                     <p className="text-sm text-gray-500">Get notified when your plants need water</p>
                   </div>
                   <label className="relative inline-flex items-center cursor-pointer">
-                    <input 
-                      type="checkbox" 
-                      className="sr-only peer" 
+                    <input
+                      type="checkbox"
+                      className="sr-only peer"
                       checked={user.preferences.notifications.waterReminders}
                       onChange={() => handleNotificationToggle('waterReminders')}
                     />
@@ -287,16 +303,16 @@ const ProfileSettingsPage = () => {
                     <span className="absolute left-1 top-1 peer-checked:left-6 h-4 w-4 bg-white rounded-full transition-all"></span>
                   </label>
                 </div>
-                
+
                 <div className="flex items-center justify-between">
                   <div>
                     <h3 className="font-medium">Fertilizer Reminders</h3>
                     <p className="text-sm text-gray-500">Get notified when it's time to fertilize</p>
                   </div>
                   <label className="relative inline-flex items-center cursor-pointer">
-                    <input 
-                      type="checkbox" 
-                      className="sr-only peer" 
+                    <input
+                      type="checkbox"
+                      className="sr-only peer"
                       checked={user.preferences.notifications.fertilizerReminders}
                       onChange={() => handleNotificationToggle('fertilizerReminders')}
                     />
@@ -304,16 +320,16 @@ const ProfileSettingsPage = () => {
                     <span className="absolute left-1 top-1 peer-checked:left-6 h-4 w-4 bg-white rounded-full transition-all"></span>
                   </label>
                 </div>
-                
+
                 <div className="flex items-center justify-between">
                   <div>
                     <h3 className="font-medium">Plant Tips</h3>
                     <p className="text-sm text-gray-500">Receive helpful tips about your plants</p>
                   </div>
                   <label className="relative inline-flex items-center cursor-pointer">
-                    <input 
-                      type="checkbox" 
-                      className="sr-only peer" 
+                    <input
+                      type="checkbox"
+                      className="sr-only peer"
                       checked={user.preferences.notifications.plantTips}
                       onChange={() => handleNotificationToggle('plantTips')}
                     />
@@ -321,16 +337,16 @@ const ProfileSettingsPage = () => {
                     <span className="absolute left-1 top-1 peer-checked:left-6 h-4 w-4 bg-white rounded-full transition-all"></span>
                   </label>
                 </div>
-                
+
                 <div className="flex items-center justify-between">
                   <div>
                     <h3 className="font-medium">App Updates</h3>
                     <p className="text-sm text-gray-500">Stay informed about new features</p>
                   </div>
                   <label className="relative inline-flex items-center cursor-pointer">
-                    <input 
-                      type="checkbox" 
-                      className="sr-only peer" 
+                    <input
+                      type="checkbox"
+                      className="sr-only peer"
                       checked={user.preferences.notifications.appUpdates}
                       onChange={() => handleNotificationToggle('appUpdates')}
                     />
@@ -341,7 +357,7 @@ const ProfileSettingsPage = () => {
               </motion.div>
             </motion.div>
           )}
-          
+
           {/* Appearance Section */}
           {activeSection === 'appearance' && (
             <motion.div
@@ -351,7 +367,7 @@ const ProfileSettingsPage = () => {
               className="space-y-6"
             >
               <motion.h2 variants={itemVariants} className="text-xl font-medium text-gray-800">Appearance</motion.h2>
-              
+
               <motion.div variants={itemVariants} className="space-y-4">
                 <h3 className="font-medium">Theme</h3>
                 <div className="grid grid-cols-3 gap-4">
@@ -364,7 +380,7 @@ const ProfileSettingsPage = () => {
                     </div>
                     <span className="text-sm font-medium">Light</span>
                   </button>
-                  
+
                   <button
                     onClick={() => handleThemeChange('dark')}
                     className={`flex flex-col items-center p-4 border rounded-lg ${user.preferences.theme === 'dark' ? 'border-green-500 bg-green-50' : 'border-gray-200'}`}
@@ -374,7 +390,7 @@ const ProfileSettingsPage = () => {
                     </div>
                     <span className="text-sm font-medium">Dark</span>
                   </button>
-                  
+
                   <button
                     onClick={() => handleThemeChange('green')}
                     className={`flex flex-col items-center p-4 border rounded-lg ${user.preferences.theme === 'green' ? 'border-green-500 bg-green-50' : 'border-gray-200'}`}
@@ -386,7 +402,7 @@ const ProfileSettingsPage = () => {
                   </button>
                 </div>
               </motion.div>
-              
+
               <motion.div variants={itemVariants} className="space-y-4">
                 <h3 className="font-medium">Font Size</h3>
                 <div className="flex items-center">
@@ -404,7 +420,7 @@ const ProfileSettingsPage = () => {
               </motion.div>
             </motion.div>
           )}
-          
+
           {/* Preferences Section */}
           {activeSection === 'preferences' && (
             <motion.div
@@ -414,16 +430,16 @@ const ProfileSettingsPage = () => {
               className="space-y-6"
             >
               <motion.h2 variants={itemVariants} className="text-xl font-medium text-gray-800">App Preferences</motion.h2>
-              
+
               <motion.div variants={itemVariants} className="space-y-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">Language</label>
-                  <select 
+                  <select
                     value={user.preferences.language}
                     onChange={(e) => setUser({
-                      ...user, 
+                      ...user,
                       preferences: {
-                        ...user.preferences, 
+                        ...user.preferences,
                         language: e.target.value
                       }
                     })}
@@ -436,21 +452,21 @@ const ProfileSettingsPage = () => {
                     <option value="Chinese">Chinese</option>
                   </select>
                 </div>
-                
+
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">Measurement Units</label>
                   <div className="flex space-x-4">
                     <label className="inline-flex items-center">
-                      <input 
-                        type="radio" 
-                        className="form-radio text-green-600" 
-                        name="measurementUnit" 
+                      <input
+                        type="radio"
+                        className="form-radio text-green-600"
+                        name="measurementUnit"
                         value="Metric"
-                        checked={user.preferences.measurementUnit === 'Metric'} 
+                        checked={user.preferences.measurementUnit === 'Metric'}
                         onChange={() => setUser({
-                          ...user, 
+                          ...user,
                           preferences: {
-                            ...user.preferences, 
+                            ...user.preferences,
                             measurementUnit: 'Metric'
                           }
                         })}
@@ -458,16 +474,16 @@ const ProfileSettingsPage = () => {
                       <span className="ml-2">Metric (°C, cm)</span>
                     </label>
                     <label className="inline-flex items-center">
-                      <input 
-                        type="radio" 
-                        className="form-radio text-green-600" 
-                        name="measurementUnit" 
+                      <input
+                        type="radio"
+                        className="form-radio text-green-600"
+                        name="measurementUnit"
                         value="Imperial"
-                        checked={user.preferences.measurementUnit === 'Imperial'} 
+                        checked={user.preferences.measurementUnit === 'Imperial'}
                         onChange={() => setUser({
-                          ...user, 
+                          ...user,
                           preferences: {
-                            ...user.preferences, 
+                            ...user.preferences,
                             measurementUnit: 'Imperial'
                           }
                         })}
@@ -476,7 +492,7 @@ const ProfileSettingsPage = () => {
                     </label>
                   </div>
                 </div>
-                
+
                 <div className="pt-2">
                   <h3 className="font-medium mb-2">Default Dashboard View</h3>
                   <div className="grid grid-cols-2 gap-4">
@@ -497,7 +513,7 @@ const ProfileSettingsPage = () => {
               </motion.div>
             </motion.div>
           )}
-          
+
           {/* Account Section */}
           {activeSection === 'account' && (
             <motion.div
@@ -507,7 +523,7 @@ const ProfileSettingsPage = () => {
               className="space-y-6"
             >
               <motion.h2 variants={itemVariants} className="text-xl font-medium text-gray-800">Account Management</motion.h2>
-              
+
               <motion.div variants={itemVariants} className="space-y-4">
                 <button className="flex items-center justify-between w-full p-4 border border-gray-200 rounded-lg hover:bg-gray-50">
                   <div className="flex items-center">
@@ -516,7 +532,7 @@ const ProfileSettingsPage = () => {
                   </div>
                   <FiChevronRight />
                 </button>
-                
+
                 <button className="flex items-center justify-between w-full p-4 border border-gray-200 rounded-lg hover:bg-gray-50">
                   <div className="flex items-center">
                     <FiUpload className="mr-3 text-gray-600" />
@@ -524,7 +540,7 @@ const ProfileSettingsPage = () => {
                   </div>
                   <FiChevronRight />
                 </button>
-                
+
                 <div className="pt-2">
                   <h3 className="font-medium mb-3 text-red-600">Danger Zone</h3>
                   <button className="flex items-center justify-between w-full p-4 border border-red-200 rounded-lg hover:bg-red-50 text-red-600">
@@ -535,7 +551,7 @@ const ProfileSettingsPage = () => {
               </motion.div>
             </motion.div>
           )}
-          
+
           {/* Help Section */}
           {activeSection === 'help' && (
             <motion.div
@@ -545,11 +561,11 @@ const ProfileSettingsPage = () => {
               className="space-y-6"
             >
               <motion.h2 variants={itemVariants} className="text-xl font-medium text-gray-800">Help & Support</motion.h2>
-              
+
               <motion.div variants={itemVariants} className="space-y-4">
                 <div className="bg-gray-50 p-4 rounded-lg">
                   <h3 className="font-medium mb-2">Frequently Asked Questions</h3>
-                  
+
                   <div className="space-y-3">
                     <details className="bg-white p-3 rounded-lg shadow-sm">
                       <summary className="font-medium cursor-pointer">How do I add a new plant?</summary>
@@ -557,14 +573,14 @@ const ProfileSettingsPage = () => {
                         Navigate to the Plants tab and tap the "+" button. Follow the step-by-step guide to add your new plant friend!
                       </p>
                     </details>
-                    
+
                     <details className="bg-white p-3 rounded-lg shadow-sm">
                       <summary className="font-medium cursor-pointer">How do notifications work?</summary>
                       <p className="mt-2 text-gray-600">
                         PlantPal sends you reminders based on each plant's specific needs. You can customize notification preferences in the Settings page.
                       </p>
                     </details>
-                    
+
                     <details className="bg-white p-3 rounded-lg shadow-sm">
                       <summary className="font-medium cursor-pointer">Can I chat with my plants?</summary>
                       <p className="mt-2 text-gray-600">
@@ -573,24 +589,24 @@ const ProfileSettingsPage = () => {
                     </details>
                   </div>
                 </div>
-                
+
                 <div className="space-y-3">
                   <button className="flex items-center justify-between w-full p-4 border border-gray-200 rounded-lg hover:bg-gray-50">
                     <span>Contact Support</span>
                     <FiChevronRight />
                   </button>
-                  
+
                   <button className="flex items-center justify-between w-full p-4 border border-gray-200 rounded-lg hover:bg-gray-50">
                     <span>View Tutorial</span>
                     <FiChevronRight />
                   </button>
-                  
+
                   <button className="flex items-center justify-between w-full p-4 border border-gray-200 rounded-lg hover:bg-gray-50">
                     <span>Report a Bug</span>
                     <FiChevronRight />
                   </button>
                 </div>
-                
+
                 <div className="text-center text-sm text-gray-500 pt-4">
                   <p>PlantPal v1.0.0</p>
                   <p>© 2025 PlantPal. All rights reserved.</p>

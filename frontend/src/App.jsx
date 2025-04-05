@@ -34,6 +34,7 @@ import RewardToast from './components/Rewards/RewardToast';
 // Test components
 import PlantHealthCheck from './pages/plantHealth.jsx';
 import Emotion from './pages/Emotion.jsx';
+import ChatNavigation from './components/Navigation/ChatNavigation.jsx';
 
 // Page components
 const SchedulePage = () => <div>Schedule Page</div>;
@@ -54,6 +55,9 @@ const PageTransition = ({ children }) => {
       >
         {children}
       </motion.div>
+      <div className="fixed bottom-8 right-8 z-50">
+        <ChatNavigation />
+      </div>
     </AnimatePresence>
   );
 };
@@ -193,10 +197,12 @@ function App() {
                   <ProfileSettingsPage />
                 </PageTransition>
               } />
+              <Route path="/health" element={
+                <PageTransition>
+                  <PlantHealthCheck />
+                </PageTransition>
+              } />
             </Route>
-
-            {/* Test routes */}
-            <Route path="/health" element={<PlantHealthCheck />} />
           </Routes>
         </NotificationProvider>
       </PlantProvider>
