@@ -1,9 +1,15 @@
 // src/components/AddPlant/PlantDetailsForm.jsx
 import React, { useState, useEffect } from 'react';
+import { usePlantTypes } from '../../context/PlantContext';
 
-const PlantDetailsForm = ({ formData, onChange }) => {
+const PlantDetailsForm = ({ formData, onChange, plantTypeId }) => {
   const [errors, setErrors] = useState({});
   const [touched, setTouched] = useState({});
+  const { getPlantTypeById, getPlantCareInfo } = usePlantTypes();
+
+  // Get plant type data
+  const plantType = getPlantTypeById(plantTypeId);
+  const careInfo = getPlantCareInfo(plantTypeId);
 
   const conditions = [
     { id: 'healthy', label: 'Healthy', icon: '😊' },
@@ -73,14 +79,29 @@ const PlantDetailsForm = ({ formData, onChange }) => {
     return null;
   };
 
+  const getCareRecommendation = () => {
+    if (!careInfo) return null;
+    
+    return (
+      <div className="mt-4 p-3 bg-blue-50 border border-blue-200 rounded-md text-sm">
+        <div className="font-medium mb-1">Care Recommendations for {plantType?.name}</div>
+        <p><span className="font-semibold">Water:</span> {careInfo.waterFrequency}</p>
+        <p><span className="font-semibold">Light:</span> {careInfo.lightNeeds}</p>
+        <p><span className="font-semibold">Care Level:</span> {careInfo.careLevel}</p>
+      </div>
+    );
+  };
+
   return (
     <div>
       <h2 className="text-xl font-semibold text-green-800 mb-4">Plant Details</h2>
       <p className="text-gray-600 mb-6">
-        Tell us more about your plant so we can provide personalized care recommendations.
+        Tell us more about your {plantType?.name || 'plant'} so we can provide personalized care recommendations.
       </p>
 
-      <div className="space-y-6">
+      {getCareRecommendation()}
+
+      <div className="space-y-6 mt-6">
         {/* Plant Nickname */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -88,8 +109,9 @@ const PlantDetailsForm = ({ formData, onChange }) => {
           </label>
           <input
             type="text"
-            value={formData.nickname}
-           
+            name="nickname"
+            value={formData.nickname || ''}
+            onChange={(e) => onChange('nickname', e.target.value)}
             onBlur={() => handleBlur('nickname')}
             placeholder="E.g., Spike, Leafy, etc."
             className={`w-full px-4 py-2 border rounded-md focus:ring-green-500 focus:border-green-500 ${
@@ -192,7 +214,8 @@ const PlantDetailsForm = ({ formData, onChange }) => {
           </label>
           <input
             type="date"
-            value={formData.acquisitionDate}
+            name="acquisitionDate"
+            value={formData.acquisitionDate || ''}
             onChange={(e) => onChange('acquisitionDate', e.target.value)}
             onBlur={() => handleBlur('acquisitionDate')}
             className={`w-full px-4 py-2 border rounded-md focus:ring-green-500 focus:border-green-500 ${

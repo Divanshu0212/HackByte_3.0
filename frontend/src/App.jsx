@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Routes, Route, useLocation } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 import { ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css'; // Make sure to import the styles
+import 'react-toastify/dist/ReactToastify.css';
 
 import Layout from './components/Layout.jsx';
 import Home from './pages/Home.jsx';
@@ -19,25 +19,21 @@ import PlantConversation from './components/PlantConversation';
 import EnhancedPlantGallery from './components/PlantGallery';
 import AddPlantFlow from './components/AddPlant/AddPlantFlow';
 import ChatPage from './pages/ChatPage';
-import NotificationsPage from './pages/NotificationsPage'; // Import the new NotificationsPage
-import ProfilePage from './components/ProfilePage'; // Import the new ProfilePage component
-
+import NotificationsPage from './pages/NotificationsPage';
+import ProfilePage from './components/ProfilePage';
 import ProfileSettingsPage from './pages/ProfileSettingsPage';
-import AddPlantPage from './pages/AddPlantPage';
 
 import { PlantChatProvider } from './components/PlantChatContext';
 import { NotificationProvider } from './components/Notifications/NotificationContext';
-// Divanshus Tests
+import { PlantProvider } from './context/PlantContext';
+
+// Test components
 import PlantChatbot from './pages/chatbot.jsx';
 import PlantHealthCheck from './pages/plantHealth.jsx';
-
 import Emotion from './pages/Emotion.jsx';
 
-// Pages that will be added later
+// Page components
 const SchedulePage = () => <div>Schedule Page</div>;
-// The ProfilePage placeholder is now removed as we are using the actual component
-
-// Replace the placeholder PlantsPage component with:
 const PlantsPage = () => <PlantsDashboard />;
 
 // Animated page transitions
@@ -61,7 +57,7 @@ const PageTransition = ({ children }) => {
 
 function App() {
     return (
-        <>
+        <PlantProvider>
             <NotificationProvider>
                 <ToastContainer
                     position="top-right"
@@ -98,7 +94,6 @@ function App() {
                         </PageTransition>
                     } />
 
-
                     {/* Main app routes with layout */}
                     <Route element={<Layout />}>
                         <Route path="/" element={
@@ -126,7 +121,6 @@ function App() {
                                 <PlantAvatarTest />
                             </PageTransition>
                         } />
-                        {/* Changed /reminders to /notifications */}
                         <Route path="/notifications" element={
                             <PageTransition>
                                 <NotificationsPage />
@@ -142,7 +136,6 @@ function App() {
                                 <ProfilePage />
                             </PageTransition>
                         } />
-                        {/* New routes from the old version */}
                         <Route path="/avatars" element={
                             <PageTransition>
                                 <PlantAvatarShowcase />
@@ -153,7 +146,6 @@ function App() {
                                 <EnhancedPlantGallery />
                             </PageTransition>
                         } />
-                        {/* Integrating PlantChatProvider here to wrap the PlantConversation */}
                         <Route path="/demo" element={
                             <PageTransition>
                                 <div className="max-w-md mx-auto">
@@ -164,7 +156,6 @@ function App() {
                                 </div>
                             </PageTransition>
                         } />
-                        {/* New Chat Page Route from the new version - now wrapped with PlantChatProvider */}
                         <Route path="/chat" element={
                             <PageTransition>
                                 <PlantChatProvider>
@@ -172,7 +163,6 @@ function App() {
                                 </PlantChatProvider>
                             </PageTransition>
                         } />
-                        {/* Plant-specific chat route from the new version - now wrapped with PlantChatProvider */}
                         <Route path="/plants/:plantId/chat" element={
                             <PageTransition>
                                 <PlantChatProvider>
@@ -180,18 +170,19 @@ function App() {
                                 </PlantChatProvider>
                             </PageTransition>
                         } />
+                        <Route path="/profile/settings" element={
+                            <PageTransition>
+                                <ProfileSettingsPage />
+                            </PageTransition>
+                        } />
                     </Route>
 
-
-                      <Route path="/profile/settings" element={<ProfileSettingsPage />} />
-
-                    {/* //Divanshus Test Routes */}
-                    
-                    <Route path="/chat" element={<PlantChatbot />} />
+                    {/* Test routes */}
+                    <Route path="/chat-test" element={<PlantChatbot />} />
                     <Route path="/health" element={<PlantHealthCheck />} />
                 </Routes>
             </NotificationProvider>
-        </>
+        </PlantProvider>
     );
 }
 
