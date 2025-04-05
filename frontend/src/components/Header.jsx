@@ -12,7 +12,7 @@ const Header = () => {
   // Map routes to their page titles
   const getPageTitle = (pathname) => {
     const routes = {
-      '/': 'Home',
+      '/dashboard': 'Home',
       '/plants': 'My Plants',
       '/reminders': 'Reminders',
       '/schedule': 'Schedule',
@@ -47,7 +47,7 @@ const Header = () => {
         </div>
       </div>
 
-      {location.pathname === '/' && (
+      {location.pathname === '/dashboard' && (
         <div className='flex flex-col items-center text-center text-text-primary w-full'>
           <img src={assets.header_img} alt="" className='w-36 h-36 rounded-full mb-6 animate-header-image' />
           <h1 className='flex items-center gap-2 text-xl sm:text-3xl font-medium mb-2 animate-text-fade'>
