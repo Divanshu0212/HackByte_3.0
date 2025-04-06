@@ -44,6 +44,7 @@ import RewardToast from './components/Rewards/RewardToast';
 import PlantHealthCheck from './pages/plantHealth.jsx';
 import Emotion from './pages/Emotion.jsx';
 import ChatNavigation from './components/Navigation/ChatNavigation.jsx';
+import CommunityNavigation from './components/Navigation/CommunityNavigation.jsx';
 
 // Page components
 const SchedulePage = () => <div>Schedule Page</div>;
@@ -66,6 +67,9 @@ const PageTransition = ({ children }) => {
       </motion.div>
       <div className="fixed bottom-8 right-8 z-50">
         <ChatNavigation />
+      </div>
+      <div className="fixed bottom-24 right-8 z-50">
+        <CommunityNavigation />
       </div>
     </AnimatePresence>
   );
