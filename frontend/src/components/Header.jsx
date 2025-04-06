@@ -36,7 +36,7 @@ const Header = () => {
           <h1 className='flex items-center gap-2 text-xl sm:text-3xl font-medium mb-2 animate-text-fade'>
             Hey {userData ? userData.name : 'Plant Enthusiast'}! <img className='w-8 aspect-square' src={assets.hand_wave} alt="" />
           </h1>
-          <h2 className='text-3xl sm:text-5xl font-semibold mb-4 animate-text-slide'>Welcome to our Plant Care App</h2>
+          <h2 className='text-3xl sm:text-5xl font-semibold mb-4 animate-text-slide'>Welcome to Plant Z</h2>
           <p className='mb-8 max-w-md'>Let's start your plant care journey. Discover tips and tricks to keep your plants thriving!</p>
           <button
             onClick={handleGetStarted}

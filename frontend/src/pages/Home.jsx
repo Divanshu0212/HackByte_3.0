@@ -11,7 +11,7 @@ const Home = () => {
           <Header />
           {/* Main content from Home.jsx */}
           <div className="z-10 w-full bg-card-bg bg-opacity-90 rounded-lg shadow-lg p-6 md:p-8 mt-8">
-            <h2 className="font-primary text-2xl md:text-3xl font-bold text-plant-green-dark mb-4">Welcome to PlantCare</h2>
+            <h2 className="font-primary text-2xl md:text-3xl font-bold text-plant-green-dark mb-4">Get Started with Plant Z</h2>
             <p className="font-secondary text-text-secondary mb-6">
               Your personal plant healthcare assistant. Keep track of your plants, get care reminders, and watch them grow!
             </p>

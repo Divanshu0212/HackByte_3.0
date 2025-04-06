@@ -577,7 +577,7 @@ const ProfileSettingsPage = () => {
                     <details className="bg-white p-3 rounded-lg shadow-sm">
                       <summary className="font-medium cursor-pointer">How do notifications work?</summary>
                       <p className="mt-2 text-gray-600">
-                        PlantPal sends you reminders based on each plant's specific needs. You can customize notification preferences in the Settings page.
+                        Plant Z sends you reminders based on each plant's specific needs. You can customize notification preferences in the Settings page.
                       </p>
                     </details>
 
@@ -608,8 +608,8 @@ const ProfileSettingsPage = () => {
                 </div>
 
                 <div className="text-center text-sm text-gray-500 pt-4">
-                  <p>PlantPal v1.0.0</p>
-                  <p>© 2025 PlantPal. All rights reserved.</p>
+                  <p>Plant Z v1.0.0</p>
+                  <p>© 2025 Plant Z. All rights reserved.</p>
                 </div>
               </motion.div>
             </motion.div>

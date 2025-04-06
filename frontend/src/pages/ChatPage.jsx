@@ -130,9 +130,9 @@ const ChatPage = () => {
 
             <div className="flex flex-col flex-grow bg-white rounded-lg shadow-md overflow-hidden">
                 {/* Plant Conversation Component - for initial setup and avatar */}
-                <div className="flex-grow overflow-hidden">
+                {/* <div className="flex-grow overflow-hidden">
                     <PlantConversation initialPlantType={currentPlant?.type || 'monstera'} />
-                </div>
+                </div> */}
 
                 {/* Chat Messages Area */}
                 <div className="flex-grow overflow-y-auto p-4 bg-green-50">

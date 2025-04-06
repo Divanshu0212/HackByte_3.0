@@ -119,7 +119,7 @@ export const useSystemNotifications = () => {
   const notifyAppUpdate = (version) => {
     addNotification({
       title: "App Updated!",
-      message: `PlantPal has been updated to version ${version} with new features!`,
+      message: `Plant Z has been updated to version ${version} with new features!`,
       type: "info"
     });
   };

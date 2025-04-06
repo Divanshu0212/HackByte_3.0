@@ -23,16 +23,16 @@ const LandingPage = () => {
   const getTranslatedText = (key) => {
     const translations = {
       en: {
-        welcome: 'Welcome to PlantCare',
+        welcome: 'Welcome to Plant Z',
         tagline: 'Your personal plant healthcare assistant.',
         subtitle: 'Track, nurture, and grow your plants with expert guidance.',
         getStarted: 'Get Started / Login',
-        footer: '© 2025 PlantCare',
+        footer: '© 2025 Plant Z',
         english: 'English',
         hindi: 'Hindi',
         telugu: 'Telugu',
         bengali: 'Bengali',
-        logoText: 'PlantCare',
+        logoText: 'Plant Z',
         greeting: 'Hey Plant Enthusiast!',
         greetingSub: "Let's start your plant care journey. Discover tips and tricks to keep your plants thriving!",
         getStartedButton: 'Get Started',

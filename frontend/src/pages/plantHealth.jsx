@@ -332,7 +332,7 @@ const PlantHealthCheck = () => {
 
             {/* Chat Section */}
             <div className="bg-white rounded-lg shadow-lg p-6 flex flex-col"> {/* flex flex-col */}
-              <h2 className="text-xl font-semibold text-gray-700 mb-4">3. Plant Care Assistant</h2>
+              <h2 className="text-xl font-semibold text-gray-700 mb-4">3. Plant Z Assistant</h2>
                 {/* Chat Messages Display */}
               <div ref={chatContainerRef} className="flex-grow overflow-y-auto h-64 mb-4 border border-gray-200 rounded-md p-3 bg-gray-50 space-y-3"> {/* Added height and scroll */}
                 {chatMessages.map((msg, index) => (

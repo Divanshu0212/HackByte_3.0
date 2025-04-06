@@ -133,7 +133,7 @@ const Login = () => {
             <img
                 onClick={() => navigate('/dashboard')}
                 src={assets.logo}
-                alt="Plant Care Logo"
+                alt="Plant Z Logo"
                 className="absolute left-5 sm:left-20 top-5 w-28 sm:w-32 cursor-pointer"
             />
             

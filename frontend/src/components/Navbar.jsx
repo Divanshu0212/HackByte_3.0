@@ -83,7 +83,7 @@ const Navbar = () => {
     <div className="hidden md:flex flex-col w-64 h-screen bg-white shadow-lg border-r border-plant-green-lightest fixed left-0 top-0 z-40">
       <div className="p-4 flex items-center border-b border-plant-green-lightest">
         <div className="text-2xl text-plant-green-medium mr-2">🌱</div>
-        <h1 className="font-primary text-xl font-bold text-plant-green-dark">PlantCare</h1>
+        <h1 className="font-primary text-xl font-bold text-plant-green-dark">Plant Z</h1>
       </div>
       <div className="flex flex-col p-4 flex-grow">
         {navItems.map((item) => (
@@ -120,7 +120,7 @@ const Navbar = () => {
   const DesktopRightSidebar = () => (
     <div className="hidden md:flex flex-col w-64 h-screen bg-card-bg shadow-lg border-l border-plant-green-lightest fixed right-0 top-0 z-50">
       <div className="p-4 flex items-center border-b border-plant-green-lightest">
-        <h1 className="font-primary text-xl font-bold text-plant-green-dark">PlantCare</h1>
+        <h1 className="font-primary text-xl font-bold text-plant-green-dark">Plant Z</h1>
         <div className="text-2xl text-plant-green-medium ml-2">🌱</div>
       </div>
       <div className="flex flex-col p-4 flex-grow">
@@ -181,7 +181,7 @@ const Navbar = () => {
         </button>
         <div className="flex items-center">
           <span className="text-xl text-plant-green-medium mr-2">🌱</span>
-          <h1 className="font-primary text-lg font-bold text-plant-green-dark">PlantCare</h1>
+          <h1 className="font-primary text-lg font-bold text-plant-green-dark">Plant Z</h1>
         </div>
         <div className="flex items-center">
           {userData ? (
@@ -256,7 +256,7 @@ const Navbar = () => {
         <div className="flex justify-between items-center mb-6">
           <div className="flex items-center">
             <span className="text-xl text-plant-green-medium mr-2">🌱</span>
-            <h1 className="font-primary text-lg font-bold text-plant-green-dark">PlantPal</h1>
+            <h1 className="font-primary text-lg font-bold text-plant-green-dark">Plant Z</h1>
           </div>
           <button onClick={toggleSidebar} className="text-text-primary">
             <CloseIcon className="w-6 h-6" />

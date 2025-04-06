@@ -204,6 +204,11 @@ function App() {
                                     <ProfileSettingsPage />
                                 </PageTransition>
                             } />
+                            <Route path="/health" element={
+                                <PageTransition>
+                                    <PlantHealthCheck />
+                                </PageTransition>
+                            } />
 
                             {/* New Community routes */}
                             <Route path="/community" element={
@@ -244,9 +249,6 @@ function App() {
                                 </PageTransition>
                             } /> */}
                         </Route>
-
-                        {/* Test routes */}
-                        <Route path="/health" element={<PlantHealthCheck />} />
                     </Routes>
                 </NotificationProvider>
             </PlantProvider>
