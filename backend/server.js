@@ -27,7 +27,7 @@ app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 app.use(cookieParser());
 app.use(cors({
   credentials: true,
-  origin: ['http://localhost:5173','https://pixelpirates.vercel.app'],
+  origin: true,
   exposedHeaders: ['set-cookie']
 }));
 
