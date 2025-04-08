@@ -5,7 +5,7 @@ export const setAuthCookie = (res, token) => {
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production', // Only use HTTPS in production
     sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax', // For cross-site requests in production
-    domain: process.env.NODE_ENV === 'production' ? 'vercel.app' : 'localhost', // Adjust to your domain
+    domain: process.env.NODE_ENV === 'production' ? 'pixelpirates.vercel.app' : 'localhost', // Adjust to your domain
     path: '/',
     maxAge: 24 * 60 * 60 * 1000 // 24 hours
   });
