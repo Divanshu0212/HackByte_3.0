@@ -8,9 +8,9 @@ const NotificationDemo = () => {
   
   // Sample plant data for demo
   const plants = [
-    { id: 'plant-1', name: 'Miss Rose', type: 'rose', growthStage: 'mature', health: 'good' },
-    { id: 'plant-2', name: 'Fernie Sanders', type: 'fern', growthStage: 'mature', health: 'moderate' },
-    { id: 'plant-3', name: 'Prickly Pete', type: 'succulent', growthStage: 'young', health: 'good' }
+    { id: 'plant-1', name: 'Tammu', type: 'Tomato', growthStage: 'mature', health: 'good' },
+    { id: 'plant-2', name: 'ChillGuy', type: 'Chilli', growthStage: 'mature', health: 'moderate' },
+    { id: 'plant-3', name: 'Bhuttu', type: 'Corn', growthStage: 'young', health: 'good' }
   ];
   
   const demoNotifications = [

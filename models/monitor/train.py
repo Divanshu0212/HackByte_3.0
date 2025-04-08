@@ -5,7 +5,7 @@ from sklearn.metrics import accuracy_score, classification_report
 import joblib
 
 # Read the noisy dataset
-noisy_data = pd.read_csv('./plant_data.csv')
+noisy_data = pd.read_csv(r'C:\Users\divan\Desktop\compe\HackByte_3.0\models\monitor\plant_data.csv')
 
 # Prepare features and target
 X = noisy_data.drop(['Timestamp', 'Plant_ID', 'Plant_Health_Status'], axis=1)

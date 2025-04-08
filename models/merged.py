@@ -93,7 +93,7 @@ def predict_plant_health(data):
 # --- Generative AI Chatbot (Plant Care Assistant) ---
 
 # Get API key from environment variable or fallback (NOT RECOMMENDED FOR PRODUCTION)
-GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY", "AIzaSyBjCoY3uemTDJdOTfFSWTb1lGoosUsvh_Y") # Added fallback for simplicity, use env var
+GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY") # Added fallback for simplicity, use env var
 gemini_configured = False
 gemini_model = None
 

@@ -27,6 +27,23 @@ const ChatPage = () => {
         messageEndRef.current?.scrollIntoView({ behavior: 'smooth' });
     }, [messages]);
 
+    // Format message text - Convert markdown-style formatting to normal text
+    const formatBotMessage = (text) => {
+        if (!text) return '';
+        
+        // Replace markdown patterns with plain text
+        // Remove ** surrounding text (bold formatting)
+        let formattedText = text.replace(/\*\*(.*?)\*\*/g, '$1');
+        
+        // Remove * surrounding text (italic formatting)
+        formattedText = formattedText.replace(/\*(.*?)\*/g, '$1');
+        
+        // Remove # symbols (header formatting)
+        formattedText = formattedText.replace(/#{1,6}\s/g, '');
+        
+        return formattedText;
+    };
+
     // Handle sending messages to backend
     const handleSendMessage = async (e) => {
         e.preventDefault();
@@ -65,7 +82,7 @@ const ChatPage = () => {
             setTimeout(() => {
                 addMessage({
                     id: Date.now() + 1,
-                    text: data.response,
+                    text: formatBotMessage(data.response), // Format the response text
                     sender: 'plant',
                     timestamp: new Date().toISOString()
                 });
@@ -129,11 +146,6 @@ const ChatPage = () => {
             </div>
 
             <div className="flex flex-col flex-grow bg-white rounded-lg shadow-md overflow-hidden">
-                {/* Plant Conversation Component - for initial setup and avatar */}
-                {/* <div className="flex-grow overflow-hidden">
-                    <PlantConversation initialPlantType={currentPlant?.type || 'monstera'} />
-                </div> */}
-
                 {/* Chat Messages Area */}
                 <div className="flex-grow overflow-y-auto p-4 bg-green-50">
                     {messages.map((msg) => (
