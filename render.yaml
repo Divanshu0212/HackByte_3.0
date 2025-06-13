@@ -1,0 +1,33 @@
+services:
+  # Frontend Static Site
+  - type: web
+    name: hackbyte-frontend
+    env: static
+    buildCommand: cd frontend && npm ci && npm run build
+    staticPublishPath: frontend/dist
+    envVars:
+      - key: VITE_API_URL
+        value: https://hackbyte-backend.onrender.com
+      - key: VITE_ML_API_URL  
+        value: https://hackbyte-ml.onrender.com
+
+  # Backend API
+  - type: web
+    name: hackbyte-backend
+    env: node
+    buildCommand: cd backend && npm ci
+    startCommand: cd backend && npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000
+      - key: FRONTEND_URL
+        value: https://hackbyte-frontend.onrender.com
+
+  # ML Models API
+  - type: web
+    name: hackbyte-ml
+    env: python
+    buildCommand: cd models && pip install -r requirements.txt
+    startCommand: cd models && python app.py
