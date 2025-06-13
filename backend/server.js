@@ -1,12 +1,9 @@
-// server.js
+// server.js (Debug Version)
 import express from "express";
 import cors from "cors";
 import 'dotenv/config';
 import cookieParser from "cookie-parser";
 import connectDB from './config/mongodb.js';
-import authRouter from './routes/authRoutes.js';
-import userRouter from './routes/userRoutes.js';
-import plantRouter from "./routes/plantRoutes.js";
 
 const app = express();
 const port = process.env.PORT || 4000;
@@ -45,7 +42,6 @@ app.use(cookieParser());
 const corsOptions = {
   credentials: true,
   origin: function (origin, callback) {
-    // Allow requests with no origin (mobile apps, Postman, etc.)
     if (!origin) return callback(null, true);
     
     const allowedOrigins = [
@@ -53,11 +49,8 @@ const corsOptions = {
       'http://localhost:3000',
       'http://localhost:5173',
       'https://hackbyte-frontend.onrender.com',
-      // Add your custom domain here when you get one
-      // 'https://yourdomain.com'
     ];
     
-    // In development, allow any localhost origin
     if (NODE_ENV === 'development' && origin.includes('localhost')) {
       return callback(null, true);
     }
@@ -72,56 +65,26 @@ const corsOptions = {
   exposedHeaders: ['set-cookie'],
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization', 'Cookie'],
-  optionsSuccessStatus: 200 // Support legacy browsers
+  optionsSuccessStatus: 200
 };
 
 app.use(cors(corsOptions));
 
-// Security headers middleware
-app.use((req, res, next) => {
-  res.setHeader('X-Content-Type-Options', 'nosniff');
-  res.setHeader('X-Frame-Options', 'DENY');
-  res.setHeader('X-XSS-Protection', '1; mode=block');
-  if (NODE_ENV === 'production') {
-    res.setHeader('Strict-Transport-Security', 'max-age=31536000; includeSubDomains');
-  }
-  next();
+// Database connection
+connectDB().then(() => {
+  console.log('✅ Database connected successfully');
+}).catch(err => {
+  console.error('❌ Database connection failed:', err);
+  process.exit(1);
 });
 
-// Request logging middleware
-app.use((req, res, next) => {
-  const timestamp = new Date().toISOString();
-  console.log(`${timestamp} - ${req.method} ${req.url} - IP: ${req.ip || req.connection.remoteAddress}`);
-  next();
-});
-
-// Database connection with retry logic
-const connectWithRetry = async () => {
-  try {
-    await connectDB();
-    console.log('✅ Database connected successfully');
-  } catch (err) {
-    console.error('❌ Database connection failed:', err.message);
-    if (NODE_ENV === 'production') {
-      console.log('🔄 Retrying database connection in 5 seconds...');
-      setTimeout(connectWithRetry, 5000);
-    } else {
-      process.exit(1);
-    }
-  }
-};
-
-connectWithRetry();
-
-// Health check endpoint for monitoring
+// Health check endpoint
 app.get('/health', (req, res) => {
   res.status(200).json({
     status: 'OK',
     timestamp: new Date().toISOString(),
     environment: NODE_ENV,
-    uptime: process.uptime(),
-    memory: process.memoryUsage(),
-    version: process.env.npm_package_version || '1.0.0'
+    uptime: process.uptime()
   });
 });
 
@@ -135,118 +98,57 @@ app.get('/', (req, res) => {
   });
 });
 
-// Routes
-app.use('/api/auth', authRouter);
-app.use('/api/user', userRouter);
-app.use('/api', plantRouter);
+// DEBUG: Load routes one by one to identify the problematic one
+console.log('📝 Loading auth routes...');
+try {
+  const authRouter = await import('./routes/authRoutes.js');
+  app.use('/api/auth', authRouter.default);
+  console.log('✅ Auth routes loaded successfully');
+} catch (error) {
+  console.error('❌ Error loading auth routes:', error.message);
+  process.exit(1);
+}
 
-// 404 handler for undefined routes
-app.use('*', (req, res) => {
-  res.status(404).json({
-    success: false,
-    message: `Route ${req.originalUrl} not found`,
-    availableEndpoints: [
-      '/health',
-      '/api/auth/*',
-      '/api/user/*',
-      '/api/*'
-    ]
-  });
-});
+console.log('📝 Loading user routes...');
+try {
+  const userRouter = await import('./routes/userRoutes.js');
+  app.use('/api/user', userRouter.default);
+  console.log('✅ User routes loaded successfully');
+} catch (error) {
+  console.error('❌ Error loading user routes:', error.message);
+  process.exit(1);
+}
 
-// Enhanced error handling middleware
+console.log('📝 Loading plant routes...');
+try {
+  const plantRouter = await import('./routes/plantRoutes.js');
+  app.use('/api', plantRouter.default);
+  console.log('✅ Plant routes loaded successfully');
+} catch (error) {
+  console.error('❌ Error loading plant routes:', error.message);
+  process.exit(1);
+}
+
+// Error handling middleware
 app.use((err, req, res, next) => {
-  const timestamp = new Date().toISOString();
-  console.error(`${timestamp} - Error:`, err.stack);
-
-  // Handle specific error types
-  if (err.name === 'ValidationError') {
-    return res.status(400).json({
-      success: false,
-      message: 'Validation Error',
-      errors: Object.values(err.errors).map(e => e.message)
-    });
-  }
-
-  if (err.name === 'CastError') {
-    return res.status(400).json({
-      success: false,
-      message: 'Invalid ID format'
-    });
-  }
-
-  if (err.code === 11000) {
-    return res.status(400).json({
-      success: false,
-      message: 'Duplicate field value'
-    });
-  }
-
-  if (err.name === 'JsonWebTokenError') {
-    return res.status(401).json({
-      success: false,
-      message: 'Invalid token'
-    });
-  }
-
-  if (err.name === 'TokenExpiredError') {
-    return res.status(401).json({
-      success: false,
-      message: 'Token expired'
-    });
-  }
-
-  // Default error response
-  res.status(err.statusCode || 500).json({
-    success: false,
-    message: err.message || 'Internal Server Error',
-    ...(NODE_ENV === 'development' && { stack: err.stack })
+  console.error(err.stack);
+  res.status(500).json({ 
+    success: false, 
+    message: 'Internal Server Error',
+    error: NODE_ENV === 'development' ? err.message : undefined
   });
 });
 
-// Start server
-const server = app.listen(port, '0.0.0.0', () => {
+const server = app.listen(port, () => {
   console.log(`🚀 Server running on port ${port}`);
   console.log(`📱 Frontend URL: ${FRONTEND_URL}`);
   console.log(`🔗 Health check: http://localhost:${port}/health`);
 });
 
-// Graceful shutdown handling
-const gracefulShutdown = (signal) => {
-  console.log(`\n🛑 Received ${signal}. Starting graceful shutdown...`);
-  
-  server.close(() => {
-    console.log('✅ HTTP server closed');
-    
-    // Close database connection
-    process.exit(0);
-  });
-
-  // Force close after 30 seconds
-  setTimeout(() => {
-    console.error('❌ Could not close connections in time, forcefully shutting down');
-    process.exit(1);
-  }, 30000);
-};
-
-// Handle shutdown signals
-process.on('SIGTERM', () => gracefulShutdown('SIGTERM'));
-process.on('SIGINT', () => gracefulShutdown('SIGINT'));
-
 // Handle unhandled promise rejections
-process.on('unhandledRejection', (err, promise) => {
-  console.error(`❌ Unhandled Rejection at:`, promise, 'reason:', err);
-  if (NODE_ENV === 'production') {
-    server.close(() => process.exit(1));
-  }
-});
-
-// Handle uncaught exceptions
-process.on('uncaughtException', (err) => {
-  console.error(`❌ Uncaught Exception:`, err);
-  if (NODE_ENV === 'production') {
-    process.exit(1);
-  }
+process.on('unhandledRejection', (err) => {
+  console.error(`❌ Unhandled Rejection: ${err.message}`);
+  server.close(() => process.exit(1));
 });
 
 export default app;
