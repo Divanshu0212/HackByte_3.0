@@ -1,0 +1,1 @@
+Flask==2.3.3 flask-cors==4.0.0 pandas==2.0.3 scikit-learn==1.3.2 joblib==1.3.2 numpy==1.25.2 google-generativeai==0.7.2 python-dotenv==1.0.0
